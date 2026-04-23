@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Obsidian Ledger | Talent Pipeline Manager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .glass-card {
+      background: rgba(23, 31, 50, 0.7);
+      backdrop-filter: blur(12px);
+    }
+    .btn-cta {
+      background: linear-gradient(135deg, #a3a6ff 0%, #6063ee 100%);
+    }
+    .form-input {
+      background-color: #000000;
+      border: 1px solid rgba(144, 143, 160, 0.15);
+      transition: border-color 0.2s ease;
+    }
+    .form-input:focus {
+      border-color: rgba(96, 99, 238, 0.4);
+      outline: none;
+    }
+    .ghost-border {
+      border: 1px solid rgba(144, 143, 160, 0.15);
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#171f32",
+            "secondary-fixed-dim": "#bac6e9",
+            "on-secondary-container": "#acb8da",
+            "surface-container-lowest": "#060e20",
+            "inverse-on-surface": "#283044",
+            "tertiary-container": "#00855b",
+            "on-secondary": "#24304b",
+            "surface-container-low": "#131b2e",
+            "surface-container-highest": "#2d3448",
+            "secondary-container": "#3d4966",
+            "on-error": "#690005",
+            "surface-container-high": "#222a3d",
+            "tertiary": "#4edea2",
+            "on-tertiary": "#003824",
+            "on-primary": "#232577",
+            "outline-variant": "#464554",
+            "surface-bright": "#31394d",
+            "on-primary-fixed-variant": "#3b3d8f",
+            "tertiary-fixed": "#6ffbbd",
+            "surface-tint": "#c0c1ff",
+            "secondary-fixed": "#d9e2ff",
+            "on-secondary-fixed-variant": "#3b4663",
+            "primary-fixed-dim": "#c0c1ff",
+            "surface-dim": "#0b1325",
+            "on-primary-container": "#fffbff",
+            "secondary": "#bac6e9",
+            "outline": "#908fa0",
+            "on-tertiary-container": "#f4fff6",
+            "surface": "#0b1325",
+            "error-container": "#93000a",
+            "on-tertiary-fixed-variant": "#005236",
+            "surface-variant": "#2d3448",
+            "on-primary-fixed": "#0a0763",
+            "on-error-container": "#ffdad6",
+            "on-background": "#dae2fc",
+            "tertiary-fixed-dim": "#4edea2",
+            "on-tertiary-fixed": "#002113",
+            "inverse-primary": "#5356a8",
+            "background": "#0b1325",
+            "on-surface": "#dae2fc",
+            "on-surface-variant": "#c7c5d7",
+            "primary": "#c0c1ff",
+            "error": "#ffb4ab",
+            "primary-fixed": "#e1e0ff",
+            "on-secondary-fixed": "#0e1b35",
+            "primary-container": "#696cc0",
+            "inverse-surface": "#dae2fc"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "fontFamily": {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar Navigation Shell -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#0b1325]/70 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
+<div class="flex items-center gap-8">
+<div class="text-xl font-extrabold text-[#dee5ff] tracking-tight font-headline">Obsidian Ledger</div>
+<nav class="hidden md:flex gap-6">
+<a class="text-[#a3aac4] hover:text-[#dee5ff] transition-colors font-headline font-extrabold tracking-[-0.02em]" href="#">Intelligence</a>
+<a class="text-[#a3aac4] hover:text-[#dee5ff] transition-colors font-headline font-extrabold tracking-[-0.02em]" href="#">Candidates</a>
+<a class="text-[#a3a6ff] border-b-2 border-[#6063ee] pb-1 font-headline font-extrabold tracking-[-0.02em]" href="#">Pipeline</a>
+<a class="text-[#a3aac4] hover:text-[#dee5ff] transition-colors font-headline font-extrabold tracking-[-0.02em]" href="#">Discovery</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<input class="form-input rounded-full px-4 py-1.5 text-sm w-64 text-on-surface-variant" placeholder="Search pipeline..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-2 text-outline text-sm">search</span>
+</div>
+<button class="text-[#a3aac4] hover:text-[#dee5ff] transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-[#a3aac4] hover:text-[#dee5ff] transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<img alt="User Profile" class="w-8 h-8 rounded-full ghost-border" data-alt="Professional headshot of a recruitment manager in high-end office lighting, cinematic atmosphere, neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmL6OSk7fg-TxoZ2pjSNBtgKKXLewGawCF2GyPiV-HIQQS4UsLa0CeDAnFfqUo5oiOxLd-Mt3HnKf7ZnjXo1z-YPqRx0ssedBLCe1Ib489LTnle9kQ1JbOwnQOdg35MGG4AP8XwpRh9PKHHWrPXJl8KS_YE0wTnGdW4vBbqLjshIT1Ft38ELkwWQ7r-dgvADKGLdz6VKYClgPK3-0z4vUZKMonyQPJEsKv9NWrP7z_W9XcouNybAPrpYZfGdyU24U3VDxiaype8vYz"/>
+</div>
+</header>
+<!-- SideNavBar Navigation Shell -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 gap-6 bg-[#131b2e] w-64 hidden lg:flex pt-20">
+<div class="flex items-center gap-3 px-2 mb-4">
+<div class="w-10 h-10 bg-primary-container rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="memory">memory</span>
+</div>
+<div>
+<div class="text-lg font-bold text-[#dee5ff] font-headline">AI Core</div>
+<div class="text-[10px] text-tertiary font-semibold uppercase tracking-widest">V2.4 Active</div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 p-3 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] font-semibold text-sm rounded-md transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] font-semibold text-sm rounded-md transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center gap-3 p-3 bg-[#222a3d] text-[#a3a6ff] font-semibold text-sm rounded-md transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Talent Pool</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] font-semibold text-sm rounded-md transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</div>
+<button class="btn-cta text-on-primary font-bold py-3 px-4 rounded-xl mt-4 flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-sm" data-icon="add_circle">add_circle</span>
+      Source Talent
+    </button>
+<div class="mt-auto pt-6">
+<a class="flex items-center gap-3 p-3 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] font-semibold text-sm rounded-md transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help_center">help_center</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas Page Container -->
+<main class="lg:ml-64 pt-24 px-6 pb-12 min-h-screen bg-surface-container-lowest">
+<div class="max-w-[1600px] mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+<div>
+<h1 class="text-4xl font-extrabold text-on-background font-headline tracking-[-0.02em] mb-2">Talent Pipeline</h1>
+<p class="text-on-surface-variant max-w-md">Orchestrating the flow of high-caliber AI engineers across active engagement cycles.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="bg-surface-container-high px-4 py-2 rounded-xl flex items-center gap-2 ghost-border">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-sm font-semibold text-on-surface">12 Live Interviews</span>
+</div>
+<div class="bg-surface-container-high px-4 py-2 rounded-xl flex items-center gap-2 ghost-border">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="filter_list">filter_list</span>
+<span class="text-sm font-semibold text-on-surface">Advanced Filter</span>
+</div>
+</div>
+</div>
+<!-- Pipeline Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+<!-- Stage 1: Lead Gen -->
+<div class="glass-card rounded-xl p-5 flex flex-col gap-4 ghost-border border-l-4 border-l-primary">
+<div class="flex justify-between items-center">
+<h3 class="font-headline font-extrabold text-on-background tracking-tight">Lead Discovery</h3>
+<span class="bg-surface-container-highest text-[10px] font-bold px-2 py-1 rounded text-on-surface-variant">24</span>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Candidate Card -->
+<div class="bg-surface-container rounded-lg p-4 transition-transform hover:scale-[1.02] duration-200 cursor-pointer">
+<div class="flex items-center gap-3 mb-3">
+<img alt="Candidate" class="w-10 h-10 rounded-full" data-alt="Portrait of a senior software engineer, tech casual attire, professional indoor lighting, depth of field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN5n37-XQmgcSE3kRvAv5Hacq6aAGeaMYAXN4Dw952VKnL5pl7SmyyP8-6jErG21tu6vDqMQfCqnClDml_WnOBM0jNSvoYI2yqX5nsaNNAcrOY_zXb43C4Mvt-dA66m7dVzp4eEgXttyWLRHqcyoQ5hMcqHBmmLeFXu96fkax1R0t45WnkalUKFShHEVCHLrpt9sdoQ9Woe1AHW9kBq8QZWz0txHXeyRyKN94P0hnQlKwu9Pa7Io4GsV6t-lqc5eKlGlszmu3JdIXk"/>
+<div>
+<div class="text-sm font-bold text-on-surface">Elena Vance</div>
+<div class="text-[11px] text-muted-text text-[#a3aac4]">Senior LLM Architect</div>
+</div>
+</div>
+<div class="flex gap-2 flex-wrap mb-3">
+<span class="text-[10px] bg-tertiary/10 text-tertiary px-2 py-0.5 rounded font-semibold">98 Match</span>
+<span class="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded font-semibold">Ex-OpenAI</span>
+</div>
+<div class="flex justify-between items-center text-[10px] text-outline">
+<span>Active 2h ago</span>
+<span class="material-symbols-outlined text-sm" data-icon="more_horiz">more_horiz</span>
+</div>
+</div>
+<!-- Candidate Card -->
+<div class="bg-surface-container rounded-lg p-4 transition-transform hover:scale-[1.02] duration-200 cursor-pointer">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 bg-secondary-container rounded-full flex items-center justify-center text-sm font-bold text-on-secondary-container">MK</div>
+<div>
+<div class="text-sm font-bold text-on-surface">Marcus Knight</div>
+<div class="text-[11px] text-muted-text text-[#a3aac4]">Neural Systems Lead</div>
+</div>
+</div>
+<div class="flex gap-2 flex-wrap mb-3">
+<span class="text-[10px] bg-tertiary/10 text-tertiary px-2 py-0.5 rounded font-semibold">92 Match</span>
+</div>
+<div class="flex justify-between items-center text-[10px] text-outline">
+<span>Active 5h ago</span>
+<span class="material-symbols-outlined text-sm" data-icon="more_horiz">more_horiz</span>
+</div>
+</div>
+</div>
+<button class="w-full py-2 rounded-lg border border-dashed border-outline-variant text-[#a3aac4] text-xs font-semibold hover:bg-surface-container-high transition-colors">
+            + Add Candidate
+          </button>
+</div>
+<!-- Stage 2: Technical Assessment -->
+<div class="glass-card rounded-xl p-5 flex flex-col gap-4 ghost-border border-l-4 border-l-tertiary">
+<div class="flex justify-between items-center">
+<h3 class="font-headline font-extrabold text-on-background tracking-tight">Technical Audit</h3>
+<span class="bg-surface-container-highest text-[10px] font-bold px-2 py-1 rounded text-on-surface-variant">12</span>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Candidate Card -->
+<div class="bg-surface-container rounded-lg p-4 transition-transform hover:scale-[1.02] duration-200 cursor-pointer">
+<div class="flex items-center gap-3 mb-3">
+<img alt="Candidate" class="w-10 h-10 rounded-full" data-alt="Modern professional woman in creative workspace, bright natural light, focused expression, cinematic portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkF0KiYxIVvaicoYu3p8a1gHE9p9avIXm5r_-C_6DpDRYNLXPn9wmoG5DDwS6OR9Q8LV76ZZ70flbz0KRue9bAPikHcqSufn5HP0yTuhbz8iJE0FjiHlbOdTaSs5qdqCHGUYxxOspMZJTOt66br5LbNp2wz0f3vkItldqaos5foIJqMbXHkz56rdnjdnxrTKT5D4MYpcsCMzig6OE9U_mlf92wS-2d8zQ85zEPjdg7YOCiRnJZ4THb_qry7zSsXg4C6T_em3-gIBeX"/>
+<div>
+<div class="text-sm font-bold text-on-surface">Sarah Chen</div>
+<div class="text-[11px] text-muted-text text-[#a3aac4]">Deep Learning Eng.</div>
+</div>
+</div>
+<div class="p-2 bg-wells rounded-md mb-3">
+<div class="flex justify-between text-[10px] mb-1">
+<span class="text-on-surface-variant">Challenge Score</span>
+<span class="text-tertiary font-bold">100/100</span>
+</div>
+<div class="w-full bg-surface-container-high h-1 rounded-full">
+<div class="bg-tertiary h-1 rounded-full" style="width: 100%"></div>
+</div>
+</div>
+<div class="flex justify-between items-center text-[10px] text-outline">
+<span>Started 1d ago</span>
+<span class="material-symbols-outlined text-sm" data-icon="forum">forum</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Stage 3: Interviewing -->
+<div class="glass-card rounded-xl p-5 flex flex-col gap-4 ghost-border border-l-4 border-l-primary-container">
+<div class="flex justify-between items-center">
+<h3 class="font-headline font-extrabold text-on-background tracking-tight">Executive Review</h3>
+<span class="bg-surface-container-highest text-[10px] font-bold px-2 py-1 rounded text-on-surface-variant">8</span>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Candidate Card -->
+<div class="bg-surface-container rounded-lg p-4 transition-transform hover:scale-[1.02] duration-200 cursor-pointer border border-primary/20">
+<div class="flex items-center gap-3 mb-3">
+<img alt="Candidate" class="w-10 h-10 rounded-full" data-alt="Executive male portrait, warm office lighting, professional and approachable, blurred background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWFV28JIJ3t68wlZDPes6G6CM9BLIY96x0TD9w69byu3UuWUH1812KfO67qshCnAJ1mACbr-Li1jHjmxuamD-WxNL0Sy4oExAfWyRu4sXNtQayz6R__5Z7MPI0uPXJGViyzl2bRN6e27Tz0zmAHyKEp6y3LXfug-fNM7kFy4IcIIT7OhxIJJPNv8atJlY6lfujD8zOH0QU9xbVJJEAMMJjvdsQJU2L63qLD1t-rlvVgr6fns_G3Xnq4Bsqgwolg6KwIebkiF5ktTrN"/>
+<div>
+<div class="text-sm font-bold text-on-surface">David Miller</div>
+<div class="text-[11px] text-muted-text text-[#a3aac4]">Principal Researcher</div>
+</div>
+</div>
+<div class="flex items-center gap-2 text-[10px] bg-primary/5 p-2 rounded mb-3">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="calendar_today">calendar_today</span>
+<span class="text-on-surface">Meeting: Today 4:00 PM</span>
+</div>
+<div class="flex justify-between items-center text-[10px] text-outline">
+<div class="flex -space-x-2">
+<div class="w-5 h-5 rounded-full bg-surface-container-high border border-background flex items-center justify-center text-[8px]">JD</div>
+<div class="w-5 h-5 rounded-full bg-surface-container-high border border-background flex items-center justify-center text-[8px]">AR</div>
+</div>
+<span class="material-symbols-outlined text-sm" data-icon="videocam">videocam</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Stage 4: Negotiation/Hired -->
+<div class="glass-card rounded-xl p-5 flex flex-col gap-4 ghost-border border-l-4 border-l-tertiary-container">
+<div class="flex justify-between items-center">
+<h3 class="font-headline font-extrabold text-on-background tracking-tight">Closing Logic</h3>
+<span class="bg-surface-container-highest text-[10px] font-bold px-2 py-1 rounded text-on-surface-variant">3</span>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Candidate Card -->
+<div class="bg-surface-container-high rounded-lg p-4 border border-tertiary/30">
+<div class="flex items-center gap-3 mb-3">
+<img alt="Candidate" class="w-10 h-10 rounded-full" data-alt="Professional woman in business setting, analytical expression, soft lighting, elegant composition" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDSSQ7EysBcRLnswTmu-A2zx5Ft4Q3w1LbTidSeSSJ4-_jDqen-7WueJ_5ZlOiRbB2hffL7s6P9msPkaBj1rTbyZrmJPY3_7FWFcikTegE8e0ScZqS_gBzmlxMKSAN2YVV2jme-4lHG0Y2IeMmHIfcTOoehNdb2alqPpPPNu-n4BoHA5_rqrUDesXYWsc7wcukj2LwSijotsgOKjq7-xeUm3nLcmqI8k9tKcUTgqRtcdPZVyROc0B1aOKB6dyEmg7hA92Q1gRA4tJr"/>
+<div>
+<div class="text-sm font-bold text-on-surface">Leila Thompson</div>
+<div class="text-[11px] text-muted-text text-[#a3aac4]">NLP Specialist</div>
+</div>
+</div>
+<div class="text-[10px] text-tertiary font-bold mb-3 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="verified">verified</span>
+                Offer Extended
+              </div>
+<div class="flex justify-between items-center text-[10px] text-outline">
+<span>Expires in 48h</span>
+<span class="material-symbols-outlined text-sm" data-icon="history_edu">history_edu</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Data Layer: Analytics Bento -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+<!-- AI Intelligence Feed -->
+<div class="lg:col-span-2 glass-card rounded-xl p-6 ghost-border">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-extrabold font-headline tracking-tight">Pipeline Intelligence</h3>
+<span class="text-xs font-semibold text-primary">Live Optimization</span>
+</div>
+<div class="space-y-4">
+<div class="flex gap-4 p-4 rounded-lg bg-surface-container-low border-l-2 border-primary">
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+<div>
+<p class="text-sm font-semibold text-on-surface mb-1">Candidate Bottleneck Detected</p>
+<p class="text-xs text-on-surface-variant">Executive Review phase is showing 15% slower velocity than previous cycle. Recommendation: Shift 2 senior engineers to review panel.</p>
+</div>
+</div>
+<div class="flex gap-4 p-4 rounded-lg bg-surface-container-low border-l-2 border-tertiary">
+<span class="material-symbols-outlined text-tertiary" data-icon="trending_up">trending_up</span>
+<div>
+<p class="text-sm font-semibold text-on-surface mb-1">High-Intent Match Found</p>
+<p class="text-xs text-on-surface-variant">An ex-DeepMind researcher just entered the Lead Discovery pool. 99% match for Project Obsidian Core.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Global Velocity Card -->
+<div class="glass-card rounded-xl p-6 ghost-border flex flex-col justify-between">
+<div>
+<h3 class="text-lg font-extrabold font-headline tracking-tight mb-4">Hiring Velocity</h3>
+<div class="text-4xl font-extrabold font-headline text-on-background mb-1">14.2 Days</div>
+<div class="text-xs font-semibold text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_downward">arrow_downward</span>
+              2.4 days faster than last month
+            </div>
+</div>
+<div class="flex items-end gap-1 h-24 mt-6">
+<div class="flex-1 bg-surface-container-highest rounded-t-sm" style="height: 40%"></div>
+<div class="flex-1 bg-surface-container-highest rounded-t-sm" style="height: 60%"></div>
+<div class="flex-1 bg-surface-container-highest rounded-t-sm" style="height: 45%"></div>
+<div class="flex-1 bg-surface-container-highest rounded-t-sm" style="height: 80%"></div>
+<div class="flex-1 bg-primary rounded-t-sm" style="height: 100%"></div>
+<div class="flex-1 bg-primary/60 rounded-t-sm" style="height: 70%"></div>
+<div class="flex-1 bg-primary/40 rounded-t-sm" style="height: 50%"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation Shell -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface-container-high px-6 py-3 flex justify-around items-center z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.4)]">
+<button class="flex flex-col items-center gap-1 text-[#a3aac4]">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] font-bold">Dash</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#a3a6ff]">
+<span class="material-symbols-outlined" data-icon="view_column">view_column</span>
+<span class="text-[10px] font-bold">Pipeline</span>
+</button>
+<button class="bg-primary p-3 rounded-full -mt-8 shadow-lg shadow-primary/30">
+<span class="material-symbols-outlined text-on-primary" data-icon="add">add</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#a3aac4]">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="text-[10px] font-bold">Stats</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#a3aac4]">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px] font-bold">Profile</span>
+</button>
+</nav>
+</body></html>

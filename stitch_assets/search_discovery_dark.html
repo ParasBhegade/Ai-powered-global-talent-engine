@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Manrope:wght@600;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#171f32",
+                        "secondary-fixed-dim": "#bac6e9",
+                        "on-secondary-container": "#acb8da",
+                        "surface-container-lowest": "#060e20",
+                        "inverse-on-surface": "#283044",
+                        "tertiary-container": "#00855b",
+                        "on-secondary": "#24304b",
+                        "surface-container-low": "#131b2e",
+                        "surface-container-highest": "#2d3448",
+                        "secondary-container": "#3d4966",
+                        "on-error": "#690005",
+                        "surface-container-high": "#222a3d",
+                        "tertiary": "#4edea2",
+                        "on-tertiary": "#003824",
+                        "on-primary": "#232577",
+                        "outline-variant": "#464554",
+                        "surface-bright": "#31394d",
+                        "on-primary-fixed-variant": "#3b3d8f",
+                        "tertiary-fixed": "#6ffbbd",
+                        "surface-tint": "#c0c1ff",
+                        "secondary-fixed": "#d9e2ff",
+                        "on-secondary-fixed-variant": "#3b4663",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "surface-dim": "#0b1325",
+                        "on-primary-container": "#fffbff",
+                        "secondary": "#bac6e9",
+                        "outline": "#908fa0",
+                        "on-tertiary-container": "#f4fff6",
+                        "surface": "#0b1325",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-variant": "#2d3448",
+                        "on-primary-fixed": "#0a0763",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#dae2fc",
+                        "tertiary-fixed-dim": "#4edea2",
+                        "on-tertiary-fixed": "#002113",
+                        "inverse-primary": "#5356a8",
+                        "background": "#0b1325",
+                        "on-surface": "#dae2fc",
+                        "on-surface-variant": "#c7c5d7",
+                        "primary": "#c0c1ff",
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#e1e0ff",
+                        "on-secondary-fixed": "#0e1b35",
+                        "primary-container": "#696cc0",
+                        "inverse-surface": "#dae2fc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { background-color: #0b1325; font-family: 'Inter', sans-serif; color: #dae2fc; }
+        .glass-card { background: rgba(23, 31, 50, 0.7); backdrop-filter: blur(12px); }
+        .form-input { background-color: #000000; border: 1px solid rgba(144, 143, 160, 0.15); transition: border-color 0.2s ease; }
+        .form-input:focus { border-color: rgba(96, 99, 238, 0.4); outline: none; }
+        .btn-cta { background: linear-gradient(135deg, #a3a6ff 0%, #6063ee 100%); transition: filter 0.2s ease; }
+        .btn-cta:hover { filter: brightness(1.1); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#0b1325]/70 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
+<div class="flex items-center gap-8">
+<span class="text-xl font-extrabold text-[#dee5ff] tracking-tight font-headline">Obsidian Ledger</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-[#a3aac4] hover:text-[#dee5ff] transition-colors font-headline font-extrabold tracking-[-0.02em]" href="#">Intelligence</a>
+<a class="text-[#a3aac4] hover:text-[#dee5ff] transition-colors font-headline font-extrabold tracking-[-0.02em]" href="#">Candidates</a>
+<a class="text-[#a3aac4] hover:text-[#dee5ff] transition-colors font-headline font-extrabold tracking-[-0.02em]" href="#">Pipeline</a>
+<a class="text-[#a3a6ff] border-b-2 border-[#6063ee] pb-1 font-headline font-extrabold tracking-[-0.02em]" href="#">Discovery</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#a3aac4] hover:text-[#dee5ff] transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-[#a3aac4] hover:text-[#dee5ff] transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+<img alt="User Profile" data-alt="Close-up professional portrait of a tech executive in soft studio lighting with a neutral dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwhonfeV2UPqMrOC0cp06oDmNOvy7A73oIXctkhr9QVGV_Q4EyieNZ0v2U1Q9klPUd37xKNFUEua5MOz9mT7ncSZ47BEIW-EcvtVYgJ-6_vpoLHEEo295vbyZrxoKZiuSYbVv2VKBZH8dO2GnaDqhAoKvBM9hd3E6zMoVKU8a6iVdGLgq-sYu9UbL3EvhASQw4urz01ZCAfSiVjTP01NfjP5QnlzO2IJbkcN_3WW6y0qmQFqwmloBCM2xQh-JKmPmmJrwAy0bentuh"/>
+</div>
+</div>
+</header>
+<!-- Main Content Shell -->
+<div class="flex pt-16 min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-[#131b2e] hidden lg:flex flex-col p-4 gap-6">
+<div class="flex items-center gap-3 px-2">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-[#dee5ff] font-headline">AI Core</h3>
+<p class="text-xs text-muted-text opacity-60">V2.4 Active</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] rounded-md transition-all duration-300 font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span> Dashboard
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] rounded-md transition-all duration-300 font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span> Analytics
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] rounded-md transition-all duration-300 font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span> Talent Pool
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] rounded-md transition-all duration-300 font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span> Settings
+                </a>
+</nav>
+<div class="mt-auto flex flex-col gap-4">
+<button class="btn-cta w-full py-3 rounded-xl font-headline font-extrabold text-sm text-on-primary shadow-lg">
+                    Source Talent
+                </button>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] rounded-md transition-all font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="help_center">help_center</span> Support
+                </a>
+</div>
+</aside>
+<!-- Search Canvas -->
+<main class="flex-1 lg:ml-64 p-6 bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto space-y-6">
+<!-- Search & Filters Header -->
+<div class="glass-card p-6 rounded-xl space-y-6 shadow-xl">
+<div class="flex flex-col md:flex-row gap-4">
+<div class="relative flex-1">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-outline material-symbols-outlined" data-icon="search">search</span>
+<input class="form-input w-full pl-12 pr-4 py-4 rounded-xl text-on-surface text-lg" placeholder="Search by role, stack, or neural signature..." type="text"/>
+</div>
+<button class="btn-cta px-8 py-4 rounded-xl font-headline font-extrabold flex items-center gap-2 text-on-primary">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+                            Execute Search
+                        </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="space-y-2">
+<label class="text-xs font-semibold uppercase tracking-wider text-outline ml-1">Expertise Tier</label>
+<select class="form-input w-full p-3 rounded-lg text-on-surface appearance-none">
+<option>Neural Architecture</option>
+<option>LLM Fine-tuning</option>
+<option>Edge Inference</option>
+<option>Vector Synthesis</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-semibold uppercase tracking-wider text-outline ml-1">Match Score (Min)</label>
+<div class="flex items-center gap-3 bg-black rounded-lg p-1 border border-outline-variant/15">
+<input class="flex-1 accent-primary ml-2" type="range"/>
+<span class="bg-surface-container-high px-2 py-1 rounded text-xs font-bold text-tertiary">85%</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-semibold uppercase tracking-wider text-outline ml-1">Engagement</label>
+<select class="form-input w-full p-3 rounded-lg text-on-surface appearance-none">
+<option>Passive Candidates</option>
+<option>Active Seekers</option>
+<option>Immediate Start</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-semibold uppercase tracking-wider text-outline ml-1">Availability</label>
+<div class="flex gap-2">
+<button class="flex-1 bg-surface-container-high py-2 rounded-lg text-xs font-bold text-primary border border-primary/30">Contract</button>
+<button class="flex-1 bg-black py-2 rounded-lg text-xs font-bold text-outline">Full-time</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Results Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[240px]">
+<!-- Featured Talent 1 -->
+<div class="md:col-span-8 glass-card rounded-xl p-6 flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4">
+<span class="bg-tertiary/10 text-tertiary px-3 py-1 rounded-full text-xs font-bold tracking-tight uppercase">98% Match Score</span>
+</div>
+<div class="flex gap-6 items-start">
+<div class="w-24 h-24 rounded-2xl bg-surface-container-high overflow-hidden border border-outline-variant/20">
+<img alt="Talent Profile" data-alt="Professional studio portrait of a woman with vibrant features against a soft charcoal background with cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCoGim09Tdw8q1N4QPtd5_SMu3fdDjQp8gnJMhYBGSp0R4szT5twcNM1FeWj4ZfZOhOANHV7W7UHh9Lfzt1jMLRNwHda4V1g-EqMK7NIVjOj102g9r8mqh-tCh44LHf9-whLvWBvIf65uW4kB-rGKH3uMqoOej0mHIiuLdia5odY5LT8awkMHJzumnbaT_B-2oVP4ZDWCC--SfLjL7tjdlTomcjKt_7Tq1Q3XggHtXr4rTWukobUzh8eXVfr4jTnotJ2z09Bkqda2j"/>
+</div>
+<div class="space-y-2">
+<h2 class="text-3xl font-extrabold font-headline tracking-tight text-[#dee5ff]">Elena Vance</h2>
+<p class="text-primary font-semibold">Lead Neural Architect • ex-DeepMind</p>
+<div class="flex gap-2 mt-4">
+<span class="bg-surface-container-low px-3 py-1 rounded-md text-xs text-[#a3aac4]">PyTorch</span>
+<span class="bg-surface-container-low px-3 py-1 rounded-md text-xs text-[#a3aac4]">CUDA</span>
+<span class="bg-surface-container-low px-3 py-1 rounded-md text-xs text-[#a3aac4]">Transformers</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-end">
+<div class="flex gap-8">
+<div>
+<p class="text-[10px] uppercase tracking-widest text-outline">Commit Velocity</p>
+<p class="text-xl font-bold font-headline">42.4<span class="text-xs text-outline ml-1">pts/wk</span></p>
+</div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-outline">Patent Count</p>
+<p class="text-xl font-bold font-headline">12</p>
+</div>
+</div>
+<button class="btn-cta px-6 py-2 rounded-lg font-bold text-sm text-on-primary">Open Dossier</button>
+</div>
+</div>
+<!-- Mini Stat Card -->
+<div class="md:col-span-4 bg-surface-container rounded-xl p-6 flex flex-col justify-center items-center text-center space-y-4">
+<div class="w-16 h-16 rounded-full bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-3xl" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div>
+<h3 class="text-2xl font-bold font-headline text-[#dee5ff]">14 New Matches</h3>
+<p class="text-sm text-outline px-4">AI found candidates matching your 'Vector Synthesis' criteria in the last 24h.</p>
+</div>
+<a class="text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all" href="#">Review Pipeline <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span></a>
+</div>
+<!-- Small Candidate Card -->
+<div class="md:col-span-4 glass-card rounded-xl p-5 flex flex-col gap-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high overflow-hidden">
+<img alt="User Profile" data-alt="Portrait of a young professional man wearing glasses, soft daylight, minimalist modern office interior background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpa4GTfRYgr4CzOqqZCfHT2GWmv4v0qNvXfDk3ROS63q2eYfEXvtv376irt885jXaTSweXK-QjjB4_ntq7VeNwziA1f5pfxtrkLnhnK3MFtlBcxvUHyOC7IUYNZXdPcDJCK6Dytl6xz63MNgziGjZ22oYY1gkhd-jf4k3yG5-b81RelByS36WtMLS7sAC2lxFWMyX7WgQICzRjtcj7hYFdbeY2VfVbnJalbXi9lR5028CySXCz6EWLnB2UFRUOG4tD7ApVXMhiMk4o"/>
+</div>
+<div>
+<h4 class="font-bold font-headline text-[#dee5ff]">Marcus Chen</h4>
+<p class="text-xs text-tertiary">89% Match Score</p>
+</div>
+</div>
+<p class="text-xs text-[#a3aac4] leading-relaxed">Specialist in reinforcement learning for autonomous robotics. Author of 'Symmetry in Neural Nets'.</p>
+<div class="mt-auto pt-4 flex border-t border-outline-variant/10 justify-between items-center">
+<span class="text-xs font-semibold text-outline">San Francisco, CA</span>
+<button class="p-2 bg-surface-container-high rounded-md text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="mail">mail</span>
+</button>
+</div>
+</div>
+<!-- Large Analytics Box -->
+<div class="md:col-span-5 glass-card rounded-xl p-6 flex flex-col relative overflow-hidden bg-gradient-to-br from-surface-container to-[#0b1325]">
+<div class="z-10 h-full flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline font-bold text-lg text-[#dee5ff]">Market Intelligence</h3>
+<span class="text-[10px] font-bold text-outline uppercase">Live Feed</span>
+</div>
+<div class="flex-1 flex flex-col justify-center space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-sm text-[#a3aac4]">Avg. Salary Trend</span>
+<span class="text-sm font-bold text-tertiary">+12.4%</span>
+</div>
+<div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-3/4 rounded-full shadow-[0_0_10px_rgba(78,222,162,0.4)]"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-sm text-[#a3aac4]">Scarcity Index</span>
+<span class="text-sm font-bold text-error">Critical</span>
+</div>
+<div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
+<div class="h-full bg-error w-11/12 rounded-full"></div>
+</div>
+</div>
+<p class="text-[10px] text-outline mt-4 italic">Neural Architecture expertise is currently at a 2-year supply low.</p>
+</div>
+</div>
+<!-- Another Small Candidate -->
+<div class="md:col-span-3 glass-card rounded-xl p-5 flex flex-col gap-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high overflow-hidden">
+<img alt="User Profile" data-alt="Close-up of a smiling woman with curly hair, natural outdoor lighting with soft green foliage background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWpTUT4_bAce38LdXZiVGePHVOApO1RIFLMkXnvSGTI9Sv73ErGeLwsVRzNLRcbcCBCkxKDbY84QkerAPtezd1tENhlPNClYSYlJk9NwbXHVXvDoZphMHGab9TZZ7GpqdRhiVJe-5Ksk1FmiqJul3mgx-9V49khcwWA8ENif5yPMw7xnKKfnL-mVrj_sUK_rAxG7UotXGCqHRnRlgbUQIkwEDlB1xLCpIuo9aLK1LA8qjiAxlcm-ZQDimCBuGWbA-J2dZ5dyHDzpjF"/>
+</div>
+<div>
+<h4 class="font-bold font-headline text-[#dee5ff]">Saira Khan</h4>
+<p class="text-xs text-tertiary">92% Match Score</p>
+</div>
+</div>
+<p class="text-xs text-[#a3aac4] leading-relaxed">LLM Safety expert. Focus on toxicity filtering and prompt injection defense mechanisms.</p>
+<div class="mt-auto pt-4 flex border-t border-outline-variant/10 justify-between items-center">
+<span class="text-xs font-semibold text-outline">London, UK</span>
+<button class="p-2 bg-surface-container-high rounded-md text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="mail">mail</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Floating Filter Trigger (Mobile Only) -->
+<button class="md:hidden fixed bottom-6 right-6 w-14 h-14 rounded-full btn-cta shadow-2xl flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+</button>
+</body></html>

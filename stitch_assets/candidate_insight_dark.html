@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#171f32",
+            "secondary-fixed-dim": "#bac6e9",
+            "on-secondary-container": "#acb8da",
+            "surface-container-lowest": "#060e20",
+            "inverse-on-surface": "#283044",
+            "tertiary-container": "#00855b",
+            "on-secondary": "#24304b",
+            "surface-container-low": "#131b2e",
+            "surface-container-highest": "#2d3448",
+            "secondary-container": "#3d4966",
+            "on-error": "#690005",
+            "surface-container-high": "#222a3d",
+            "tertiary": "#4edea2",
+            "on-tertiary": "#003824",
+            "on-primary": "#232577",
+            "outline-variant": "#464554",
+            "surface-bright": "#31394d",
+            "on-primary-fixed-variant": "#3b3d8f",
+            "tertiary-fixed": "#6ffbbd",
+            "surface-tint": "#c0c1ff",
+            "secondary-fixed": "#d9e2ff",
+            "on-secondary-fixed-variant": "#3b4663",
+            "primary-fixed-dim": "#c0c1ff",
+            "surface-dim": "#0b1325",
+            "on-primary-container": "#fffbff",
+            "secondary": "#bac6e9",
+            "outline": "#908fa0",
+            "on-tertiary-container": "#f4fff6",
+            "surface": "#0b1325",
+            "error-container": "#93000a",
+            "on-tertiary-fixed-variant": "#005236",
+            "surface-variant": "#2d3448",
+            "on-primary-fixed": "#0a0763",
+            "on-error-container": "#ffdad6",
+            "on-background": "#dae2fc",
+            "tertiary-fixed-dim": "#4edea2",
+            "on-tertiary-fixed": "#002113",
+            "inverse-primary": "#5356a8",
+            "background": "#0b1325",
+            "on-surface": "#dae2fc",
+            "on-surface-variant": "#c7c5d7",
+            "primary": "#c0c1ff",
+            "error": "#ffb4ab",
+            "primary-fixed": "#e1e0ff",
+            "on-secondary-fixed": "#0e1b35",
+            "primary-container": "#696cc0",
+            "inverse-surface": "#dae2fc"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "fontFamily": {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; letter-spacing: -0.02em; }
+    .glass-card { background: rgba(23, 31, 50, 0.7); backdrop-filter: blur(12px); border-radius: 0.75rem; }
+    .text-accent { color: #c0c1ff; }
+    .text-muted { color: #a3aac4; }
+    .ghost-border { border: 1px solid rgba(144, 143, 160, 0.15); }
+    .btn-cta { background: linear-gradient(135deg, #c0c1ff 0%, #696cc0 100%); color: #232577; }
+    .neon-glow { text-shadow: 0 0 12px rgba(78, 222, 162, 0.4); }
+    .well-recess { background: #000000; }
+  </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary-container selection:text-white">
+<!-- Shared TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#0b1325]/70 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
+<div class="flex items-center gap-8">
+<div class="text-xl font-extrabold text-[#dee5ff] tracking-tight">Obsidian Ledger</div>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="font-['Manrope'] font-extrabold tracking-[-0.02em] text-[#a3aac4] hover:text-[#dee5ff] transition-colors" href="#">Intelligence</a>
+<a class="font-['Manrope'] font-extrabold tracking-[-0.02em] text-[#a3a6ff] border-b-2 border-[#6063ee] pb-1 hover:text-[#dee5ff] transition-colors" href="#">Candidates</a>
+<a class="font-['Manrope'] font-extrabold tracking-[-0.02em] text-[#a3aac4] hover:text-[#dee5ff] transition-colors" href="#">Pipeline</a>
+<a class="font-['Manrope'] font-extrabold tracking-[-0.02em] text-[#a3aac4] hover:text-[#dee5ff] transition-colors" href="#">Discovery</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#a3aac4] cursor-pointer hover:text-[#dee5ff]">notifications</span>
+<span class="material-symbols-outlined text-[#a3aac4] cursor-pointer hover:text-[#dee5ff]">settings</span>
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="professional corporate headshot of a business executive with a neutral expression and soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7utwsgcwUQT7KSkivz_n-LnJ2Mq8TOnEdekvuCVeRB-Drx7Wf4tJF4RPgxO7ZCE52JToqFfeDwneRfweT9ZTsnijKrJPk780_KgSQy6cbeDjLyv5POu9O_q8wDc7BrY1JF96OJ7T9kfsFLR_475rTtaXMs16e58OVfpXGBZzJWuobZa5Vg97wkyDcSVrqAsA7WyTlx5l4v3RZc_dKr9wyPJiblRcdMxWs824Zbo0AKHyz6IHwO1mmze94Ko9BOMFgqo0LYLm3VRKm"/>
+</div>
+</header>
+<!-- Shared SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 gap-6 bg-[#131b2e] w-64 pt-20 hidden md:flex">
+<div class="px-2">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></div>
+<span class="text-lg font-bold text-[#dee5ff] font-['Manrope']">AI Core</span>
+</div>
+<span class="text-xs font-semibold text-[#a3aac4] uppercase tracking-widest">V2.4 Active</span>
+</div>
+<nav class="flex flex-col gap-1 mt-4">
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] rounded-md transition-all font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+      </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] rounded-md transition-all font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined">analytics</span> Analytics
+      </a>
+<a class="flex items-center gap-3 px-3 py-2.5 bg-[#222a3d] text-[#a3a6ff] rounded-md transition-all font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined">group</span> Talent Pool
+      </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] rounded-md transition-all font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+      </a>
+</nav>
+<div class="mt-auto flex flex-col gap-4">
+<button class="btn-cta w-full py-3 rounded-xl font-['Manrope'] font-extrabold text-sm flex items-center justify-center gap-2 shadow-lg shadow-primary-container/20">
+<span class="material-symbols-outlined text-sm">bolt</span> Source Talent
+      </button>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] rounded-md transition-all font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined">help_center</span> Support
+      </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-20 pb-12 px-6 lg:px-10 bg-surface-container-lowest min-h-screen">
+<div class="max-w-7xl mx-auto space-y-6">
+<!-- Top Header Area -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div class="flex items-center gap-5">
+<div class="relative">
+<img class="w-20 h-20 rounded-2xl border-2 border-primary/20 object-cover" data-alt="portrait of a software engineer with glasses in a modern office setting with blue and purple ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUdR6WValv4NRHGGHBBy1dspHIJNBTSM1DeCjhRW8kaJpsI64xh4iB1bRTkr8UxbJoOBLQwHg85sV7_lNHEi5K-5v7KjxNf4sMeF2eKJRp-zpxLouvr1TYLXLCLGttjioRbboZvyBYc0oeiyN3EBFJehSGIVUClMXlKSgUXCo5lLcKzk3fxjTNW2o5tauZn9SGhJ1ha3ZnFRnhTZ-PM3oj2I8mazVxxrNd-C4BXB5LkJvplTKA6POTrclByFMFk8gdgYOEsVMfQmRW"/>
+<div class="absolute -bottom-2 -right-2 bg-tertiary text-on-tertiary text-[10px] font-extrabold px-2 py-1 rounded-full shadow-lg">98% FIT</div>
+</div>
+<div>
+<h1 class="text-3xl font-extrabold text-on-surface">Elias Thorne</h1>
+<p class="text-muted font-body">Lead ML Architect &amp; System Designer • San Francisco, CA</p>
+<div class="flex gap-2 mt-2">
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-md text-xs font-semibold">Senior Level</span>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-md text-xs font-semibold">Open to Role</span>
+</div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="px-5 py-2.5 rounded-xl ghost-border text-on-surface font-semibold text-sm flex items-center gap-2 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-lg">share</span> Export
+          </button>
+<button class="px-5 py-2.5 rounded-xl btn-cta font-extrabold text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">mail</span> Contact Candidate
+          </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- AI Insight Box (High Priority) -->
+<div class="md:col-span-8 glass-card p-6 flex flex-col justify-between min-h-[320px]">
+<div>
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-extrabold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">psychology</span>
+                AI Core Analysis
+              </h2>
+<span class="text-xs font-bold text-muted uppercase tracking-tighter">Updated 2m ago</span>
+</div>
+<p class="text-on-surface-variant text-lg leading-relaxed mb-6 italic">
+              "Elias demonstrates a rare synthesis of low-level systems engineering and high-level neural architecture. His recent work on distributed LLM quantization suggests he is in the top 1% of candidates for the Infrastructure Scalability lead."
+            </p>
+</div>
+<div class="grid grid-cols-3 gap-4 border-t border-outline-variant/20 pt-6">
+<div>
+<p class="text-xs font-bold text-muted uppercase mb-1">Stability Score</p>
+<div class="text-2xl font-extrabold text-tertiary neon-glow">94/100</div>
+</div>
+<div>
+<p class="text-xs font-bold text-muted uppercase mb-1">Growth Velocity</p>
+<div class="text-2xl font-extrabold text-accent">High</div>
+</div>
+<div>
+<p class="text-xs font-bold text-muted uppercase mb-1">Culture Delta</p>
+<div class="text-2xl font-extrabold text-on-surface">Optimal</div>
+</div>
+</div>
+</div>
+<!-- Technical Stack -->
+<div class="md:col-span-4 glass-card p-6">
+<h2 class="text-lg font-extrabold text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-accent">code</span>
+            Verified Stack
+          </h2>
+<div class="space-y-5">
+<div>
+<div class="flex justify-between mb-1.5 text-xs font-semibold">
+<span class="text-on-surface">PyTorch / TensorFlow</span>
+<span class="text-accent">Expert</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 95%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-1.5 text-xs font-semibold">
+<span class="text-on-surface">Rust / C++</span>
+<span class="text-accent">Advanced</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 82%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-1.5 text-xs font-semibold">
+<span class="text-on-surface">Distributed Systems</span>
+<span class="text-accent">Expert</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 90%"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-high text-xs rounded-md text-on-surface-variant ghost-border">CUDA</span>
+<span class="px-2 py-1 bg-surface-container-high text-xs rounded-md text-on-surface-variant ghost-border">Kubernetes</span>
+<span class="px-2 py-1 bg-surface-container-high text-xs rounded-md text-on-surface-variant ghost-border">gRPC</span>
+<span class="px-2 py-1 bg-surface-container-high text-xs rounded-md text-on-surface-variant ghost-border">Redis</span>
+</div>
+</div>
+<!-- Experience Timeline -->
+<div class="md:col-span-7 glass-card p-6">
+<h2 class="text-lg font-extrabold text-on-surface mb-6">Professional Vector</h2>
+<div class="space-y-8 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-px before:bg-outline-variant/30">
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-container border-2 border-primary flex items-center justify-center">
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-extrabold text-on-surface">Senior ML Engineer</h3>
+<p class="text-accent text-sm font-semibold">Neural Dynamics Inc.</p>
+</div>
+<span class="text-xs text-muted font-mono bg-surface-container-low px-2 py-1 rounded">2021 — PRESENT</span>
+</div>
+<p class="text-muted text-sm mt-2 leading-relaxed">Pioneered distributed training frameworks reducing latency by 40%. Led a team of 12 researchers in developing proprietary LLM optimizations.</p>
+</div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-container border-2 border-outline-variant flex items-center justify-center">
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-extrabold text-on-surface">Systems Architect</h3>
+<p class="text-accent text-sm font-semibold">Vertex Cloud Systems</p>
+</div>
+<span class="text-xs text-muted font-mono bg-surface-container-low px-2 py-1 rounded">2018 — 2021</span>
+</div>
+<p class="text-muted text-sm mt-2 leading-relaxed">Designed core infrastructure for high-availability cloud services. Scaled backend architecture from 10k to 5M concurrent users.</p>
+</div>
+</div>
+</div>
+<!-- Career Trajectory Graph & Stats -->
+<div class="md:col-span-5 flex flex-col gap-6">
+<div class="glass-card p-6 flex-1">
+<h2 class="text-lg font-extrabold text-on-surface mb-4">Sentiment Mapping</h2>
+<div class="well-recess rounded-xl h-40 flex items-end justify-between p-4 gap-2">
+<div class="w-full bg-primary-container/30 h-[20%] rounded-t-sm"></div>
+<div class="w-full bg-primary-container/40 h-[45%] rounded-t-sm"></div>
+<div class="w-full bg-primary-container/50 h-[30%] rounded-t-sm"></div>
+<div class="w-full bg-primary-container/60 h-[75%] rounded-t-sm"></div>
+<div class="w-full bg-primary-container/80 h-[60%] rounded-t-sm"></div>
+<div class="w-full bg-primary h-[90%] rounded-t-sm"></div>
+<div class="w-full bg-primary h-[85%] rounded-t-sm"></div>
+</div>
+<div class="mt-4 flex justify-between items-center">
+<span class="text-[10px] font-bold text-muted uppercase">Past Performance</span>
+<span class="text-[10px] font-bold text-tertiary uppercase">Predicted Peak</span>
+</div>
+</div>
+<div class="glass-card p-6 flex-1">
+<h2 class="text-lg font-extrabold text-on-surface mb-4">Quick Stats</h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-3 surface-container-high rounded-xl ghost-border">
+<span class="material-symbols-outlined text-primary mb-2">work_history</span>
+<p class="text-xs text-muted uppercase font-bold">Tenure Avg.</p>
+<p class="text-xl font-extrabold text-on-surface">3.2 Yrs</p>
+</div>
+<div class="p-3 surface-container-high rounded-xl ghost-border">
+<span class="material-symbols-outlined text-tertiary mb-2">stars</span>
+<p class="text-xs text-muted uppercase font-bold">Patents</p>
+<p class="text-xl font-extrabold text-on-surface">4 Active</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Collaborative Assessment -->
+<div class="md:col-span-12 glass-card p-6 overflow-hidden relative">
+<div class="absolute top-0 right-0 p-8 opacity-5">
+<span class="material-symbols-outlined text-9xl">format_quote</span>
+</div>
+<div class="flex items-center gap-4 mb-6">
+<h2 class="text-xl font-extrabold text-on-surface">Peer Validation Ledger</h2>
+<div class="h-px flex-1 bg-outline-variant/20"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="space-y-3">
+<div class="flex items-center gap-2">
+<img class="w-8 h-8 rounded-full" data-alt="professional portrait of a senior manager with a friendly smile and bright background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiF3fHoo2XxPU5FSBKC8JgonovpJKkTJd6Pb68poWBc2MSxYRd670-SZvqsxpKPdxK-TDGnOo9HNjL6l-2GBq03qILIfmsYZqSPjpU4mXhqeqop67m1rt2w1Hod64VLwiLXZ4DXgweXoMi9_OBAqjnH7o4TFzb2cLsbuqrSzcPiMGBPNw3vqOunW39VbJJZ63usjomc65dj3lXtxhlthe1sKsyZ-DuZNAy5QTvYVKsREioY6AvJ-83N-Z55LSHaydiBs1czGC8j9au"/>
+<div>
+<p class="text-xs font-bold text-on-surface">Jane Doe</p>
+<p class="text-[10px] text-muted">CTO, Neural Dynamics</p>
+</div>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">"One of the few engineers who can articulate complex mathematical concepts to stakeholders without losing technical nuance."</p>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-2">
+<img class="w-8 h-8 rounded-full" data-alt="headshot of a young tech professional with short dark hair and a modern office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXgHpa25-o3VuwPZNgeIciVQpYEBL579gJbO6osUmEH3_x2RnhYBXfNl3dPCHxq_GcdUHy6bGPGq2riv89L4a8EMnHvUki3uIOQoTvmW1KLw8IEgDzf6dENr8vhgL1ZhXOtCu7C4meG5JnspBY8O9UfxfiWFtVUPn1-cKh-DgUzXXhDOF3bFBcb6NRwO45-78rspvNcIvTu8k5yQ-2TEVxg2RHcDXpmktL_w_RPkOOb7w-VzKTcKIW7f9ejCUETipzSQBaN0DN0Wql"/>
+<div>
+<p class="text-xs font-bold text-on-surface">Mark Koven</p>
+<p class="text-[10px] text-muted">Principal Researcher</p>
+</div>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">"His contribution to the inference engine redesign was pivotal. He consistently delivers code that is both performant and elegant."</p>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-2">
+<img class="w-8 h-8 rounded-full" data-alt="close-up of a middle-aged female professional with a confident expression and blurred office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGlDuBwfq3HORqTktkwm8KrTlnr7zgWGDxpal2iqNT4g71dHnV_4lLr-qmV1fbZClQRvagESnVelBijgn5q5rwbcmPi8Ew5EsPUVoZ29-wzIhUOg4XogNeJcufQYvCWSeVR7gxKYjp0FOOAlPUe4uXH_BJSeSTCCXqjNfQgLlemO2RfSPMd84S15jpq5DeYPMRDHbg2GWACqBAueN_3WRjudFCXj4p0hoAP6WvARENvOFS_PgAgfBfZ0lzDPZzWQs76FzoAc-zIPi_"/>
+<div>
+<p class="text-xs font-bold text-on-surface">Sarah Lin</p>
+<p class="text-[10px] text-muted">Lead Recruiter</p>
+</div>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">"Extremely selective with his roles. When Elias shows interest, it's usually because the challenge is genuinely unique."</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Navigation (Bottom Bar) -->
+<footer class="md:hidden fixed bottom-0 w-full h-16 bg-[#0b1325]/90 backdrop-blur-xl border-t border-outline-variant/10 flex justify-around items-center px-4 z-50">
+<button class="flex flex-col items-center text-[#a3aac4]">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] mt-1">Dash</span>
+</button>
+<button class="flex flex-col items-center text-[#a3a6ff]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="text-[10px] mt-1">Talent</span>
+</button>
+<button class="w-12 h-12 rounded-full btn-cta -mt-8 flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="flex flex-col items-center text-[#a3aac4]">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-[10px] mt-1">Data</span>
+</button>
+<button class="flex flex-col items-center text-[#a3aac4]">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] mt-1">Config</span>
+</button>
+</footer>
+</body></html>

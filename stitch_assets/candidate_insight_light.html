@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#a8c6ff",
+            "on-tertiary-fixed": "#1a1a1a",
+            "on-background": "#1a1a1a",
+            "surface-variant": "#e8e3da",
+            "on-primary-fixed": "#1a1a1a",
+            "on-error-container": "#93000a",
+            "surface": "#f5f0e8",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed-variant": "#1a1a1a",
+            "secondary": "#e63b2e",
+            "outline": "#1a1a1a",
+            "on-tertiary-container": "#1a1a1a",
+            "primary-container": "#ffcc00",
+            "inverse-surface": "#1a1a1a",
+            "primary-fixed": "#ffcc00",
+            "on-secondary-fixed": "#1a1a1a",
+            "error": "#cc0000",
+            "primary": "#1a1a1a",
+            "on-surface-variant": "#4a4a4a",
+            "on-surface": "#1a1a1a",
+            "background": "#f5f0e8",
+            "inverse-primary": "#f5f0e8",
+            "on-tertiary": "#ffffff",
+            "tertiary": "#0055ff",
+            "surface-container-high": "#e8e3da",
+            "on-error": "#ffffff",
+            "surface-container-low": "#f2ede5",
+            "surface-container-highest": "#e2ddd4",
+            "secondary-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "inverse-on-surface": "#f5f0e8",
+            "tertiary-container": "#d6e3ff",
+            "on-secondary": "#1a1a1a",
+            "on-secondary-container": "#1a1a1a",
+            "surface-container": "#eee9e0",
+            "secondary-fixed-dim": "#ffb3ab",
+            "surface-dim": "#d6d1c9",
+            "on-primary-container": "#1a1a1a",
+            "primary-fixed-dim": "#e6b800",
+            "secondary-fixed": "#ffdad6",
+            "on-secondary-fixed-variant": "#1a1a1a",
+            "tertiary-fixed": "#d6e3ff",
+            "surface-tint": "#1a1a1a",
+            "surface-bright": "#faf7f2",
+            "on-primary-fixed-variant": "#1a1a1a",
+            "on-primary": "#ffffff",
+            "outline-variant": "#d0cbc3"
+          },
+          "borderRadius": {
+            "DEFAULT": "0px",
+            "lg": "0px",
+            "xl": "0px",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline": ["Space Grotesk"],
+            "body": ["Inter"],
+            "label": ["Space Grotesk"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .neo-brutalist-shadow {
+      box-shadow: 6px 6px 0px 0px #1a1a1a;
+    }
+    .neo-brutalist-shadow-sm {
+      box-shadow: 4px 4px 0px 0px #1a1a1a;
+    }
+    .neo-brutalist-border {
+      border: 3px solid #1a1a1a;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-background font-body text-on-background antialiased min-h-screen">
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 bg-background border-b-[3px] border-primary">
+<div class="flex items-center gap-8">
+<div class="text-2xl font-headline font-bold tracking-tighter uppercase">
+        Obsidian Ledger
+      </div>
+<nav class="hidden md:flex gap-6 items-center h-full">
+<a class="font-headline font-bold text-sm tracking-widest uppercase text-on-background border-b-[4px] border-primary-container pt-1 transition-all" href="#">Intelligence</a>
+<a class="font-headline font-bold text-sm tracking-widest uppercase text-on-background/60 hover:text-on-background transition-all" href="#">Candidates</a>
+<a class="font-headline font-bold text-sm tracking-widest uppercase text-on-background/60 hover:text-on-background transition-all" href="#">Pipeline</a>
+<a class="font-headline font-bold text-sm tracking-widest uppercase text-on-background/60 hover:text-on-background transition-all" href="#">Discovery</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<div class="material-symbols-outlined text-primary text-2xl cursor-pointer">notifications</div>
+<span class="absolute -top-1 -right-1 bg-secondary text-white text-[10px] w-4 h-4 flex items-center justify-center font-bold">3</span>
+</div>
+<div class="w-10 h-10 neo-brutalist-border bg-tertiary-container overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="professional headshot of a modern recruiter with minimalist glasses on a flat yellow background neo-brutalist aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxEx7-udIF_oNUmEhuVjnG0WfxH_LIOSGmyuNV88cQH8rK_4d-O6twAEDs_ougc7R7Qct_lei-nvDfWR_6su-JjNWdx6GyJy_TCGSa3nHaUPlMq7ixRnx-pBRb3PC8ssfUOAuWuS2U7sgSH93Od_yw1IZgBvQl_r9AHkFe5bJTwY399pNxDRSZgs4FbFPs74Ll2u2yJWQum5f01TUHNIcAH9fWyNgDxilpSnLbQI1CssxONogr6HjsJTprMNKgrah58ArbBnvpJoqn"/>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-20 px-8 max-w-7xl mx-auto page-container">
+<div class="grid grid-cols-12 gap-8">
+<div class="col-span-12 lg:col-span-4 space-y-8">
+<div class="bg-surface neo-brutalist-border neo-brutalist-shadow p-6">
+<div class="aspect-square bg-surface-variant mb-6 neo-brutalist-border relative overflow-hidden group">
+<img alt="Candidate" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" data-alt="portrait of a high-end software engineer wearing tech-wear against a solid blue wall clean lines sharp focus bauhaus photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2Daxad5etxjySpsgvS2GbufbH0O_lHyuBVkSB0WTSAN9-ttcwn023LQxugvlOXw1pzwsj23kxtcCZHcDYMz4ERoPBlNT-vRO6sGMtCgg6rr_zKi3MXO8IN8TNCF2jTMvbSB77Ycrt9MGLH-YwgZ9qJJmbUZJ2c-UQSjq4Ixd7JnTxw2rj4xpAYJfJycbwsUzZv-9-IlOmIxQLIJF5E9UOQjA030g2cZxMMOlFyibZS8QpD90iEyjivetnEkNF8c8WSXfECPIBpf-F"/>
+<div class="absolute bottom-4 left-4 bg-primary-container px-3 py-1 font-headline font-bold text-xs uppercase neo-brutalist-border">Top 1% Talent</div>
+</div>
+<h1 class="text-4xl font-headline font-bold leading-none mb-2 uppercase tracking-tighter">Alex Sterling</h1>
+<p class="text-lg font-headline font-medium text-tertiary uppercase mb-6">Staff ML Engineer • 12 YOE</p>
+<div class="space-y-3 mb-8">
+<div class="flex items-center gap-3 bg-surface-container p-3 neo-brutalist-border">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<span class="font-headline font-bold text-sm">BERLIN, GERMANY</span>
+</div>
+<div class="flex items-center gap-3 bg-surface-container p-3 neo-brutalist-border">
+<span class="material-symbols-outlined text-primary">payments</span>
+<span class="font-headline font-bold text-sm">€165,000 / ANNUM</span>
+</div>
+<div class="flex items-center gap-3 bg-surface-container p-3 neo-brutalist-border">
+<span class="material-symbols-outlined text-primary">bolt</span>
+<span class="font-headline font-bold text-sm">AVAILABLE: 2 WEEKS</span>
+</div>
+</div>
+<button class="w-full py-4 bg-primary text-white font-headline font-bold text-lg uppercase neo-brutalist-border hover:bg-primary-container hover:text-primary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+            INITIATE OUTREACH
+          </button>
+</div>
+<div class="bg-secondary p-6 neo-brutalist-border neo-brutalist-shadow text-white">
+<h3 class="font-headline font-bold text-xl mb-4 uppercase italic">AI Matching Engine</h3>
+<div class="flex items-end gap-2 mb-4">
+<span class="text-6xl font-headline font-black leading-none">98</span>
+<span class="text-2xl font-headline font-bold">%</span>
+</div>
+<p class="font-body text-sm leading-tight opacity-90 mb-6">High compatibility with "Project Obsidian" core architecture requirements. Strength in distributed systems and neural-symbolic reasoning.</p>
+<div class="h-4 bg-primary/20 neo-brutalist-border overflow-hidden">
+<div class="h-full bg-primary-container w-[98%]"></div>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-8 space-y-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-primary-container p-6 neo-brutalist-border neo-brutalist-shadow">
+<h3 class="font-headline font-bold text-xl mb-6 uppercase flex items-center gap-2">
+<span class="material-symbols-outlined">psychology</span> Technical Core
+            </h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-white neo-brutalist-border font-headline font-bold text-xs uppercase">PyTorch</span>
+<span class="px-3 py-1 bg-white neo-brutalist-border font-headline font-bold text-xs uppercase">Rust</span>
+<span class="px-3 py-1 bg-white neo-brutalist-border font-headline font-bold text-xs uppercase">Distributed Systems</span>
+<span class="px-3 py-1 bg-white neo-brutalist-border font-headline font-bold text-xs uppercase">Kubernetes</span>
+<span class="px-3 py-1 bg-white neo-brutalist-border font-headline font-bold text-xs uppercase">Transformers</span>
+<span class="px-3 py-1 bg-white neo-brutalist-border font-headline font-bold text-xs uppercase">LLM Finetuning</span>
+<span class="px-3 py-1 bg-white neo-brutalist-border font-headline font-bold text-xs uppercase">CUDA</span>
+</div>
+</div>
+<div class="bg-tertiary-container p-6 neo-brutalist-border neo-brutalist-shadow">
+<h3 class="font-headline font-bold text-xl mb-6 uppercase flex items-center gap-2">
+<span class="material-symbols-outlined">trending_up</span> Trajectory
+            </h3>
+<div class="relative h-24 w-full flex items-end gap-1">
+<div class="flex-1 bg-primary border-t-2 border-x-2 border-primary" style="height: 40%"></div>
+<div class="flex-1 bg-primary border-t-2 border-x-2 border-primary" style="height: 55%"></div>
+<div class="flex-1 bg-primary border-t-2 border-x-2 border-primary" style="height: 45%"></div>
+<div class="flex-1 bg-primary border-t-2 border-x-2 border-primary" style="height: 70%"></div>
+<div class="flex-1 bg-primary border-t-2 border-x-2 border-primary" style="height: 90%"></div>
+<div class="flex-1 bg-secondary border-t-2 border-x-2 border-primary" style="height: 100%"></div>
+</div>
+<p class="mt-4 font-headline font-bold text-xs uppercase text-center">Velocity Score: Aggressive (Top 5%)</p>
+</div>
+</div>
+<div class="bg-surface neo-brutalist-border neo-brutalist-shadow overflow-hidden">
+<div class="bg-primary text-white p-4">
+<h3 class="font-headline font-bold text-xl uppercase tracking-widest">Experience Ledger</h3>
+</div>
+<div class="divide-y-[3px] divide-primary">
+<div class="p-6 flex flex-col md:flex-row gap-6 group hover:bg-surface-container-high transition-colors">
+<div class="w-16 h-16 bg-white neo-brutalist-border flex-shrink-0 flex items-center justify-center p-2">
+<img alt="Company" class="w-full h-full object-contain" data-alt="abstract minimalist geometric tech logo black on white square" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY5aJNzwt-IBtpV2QAbNyrcpnry2h-WcDc4x-E428djdC-16OHM67F4R3ytu3fRQyjwdJwYYhHWX95Pk3RBQ1SgupXxjBDJCNbpUk_2amP3m9UNs_VtlSWV-744XlJpw9cjA7mT1CwF927nAZDfxAnHck3IQCbjkFLrb8k1icagT9Dk1TIdHN2L7fD0N-YWpkFoJWciedsnYhOsgU7HafhTKOVRPCBjTqqLvllb6Gh3LQ9--J6zkaKT-OyNaES4pzgxCfmfZatmzUG"/>
+</div>
+<div class="flex-grow">
+<div class="flex flex-col md:flex-row md:justify-between items-start mb-2">
+<h4 class="text-2xl font-headline font-black uppercase">Staff ML Engineer</h4>
+<span class="font-headline font-bold text-sm bg-tertiary text-white px-2 py-1">2020 — PRESENT</span>
+</div>
+<p class="font-headline font-bold text-tertiary mb-3 uppercase tracking-tighter">NeuroScale AI Labs</p>
+<ul class="space-y-2 text-sm font-body">
+<li class="flex gap-2"><span class="text-secondary font-black">/</span> Spearheaded the development of a proprietary distributed training framework reducing compute costs by 40%.</li>
+<li class="flex gap-2"><span class="text-secondary font-black">/</span> Architected real-time inference pipelines handling 50k requests/sec with &lt;100ms latency.</li>
+</ul>
+</div>
+</div>
+<div class="p-6 flex flex-col md:flex-row gap-6 group hover:bg-surface-container-high transition-colors">
+<div class="w-16 h-16 bg-white neo-brutalist-border flex-shrink-0 flex items-center justify-center p-2">
+<img alt="Company" class="w-full h-full object-contain" data-alt="minimalist bauhaus circle and square logo black and red" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3EDikq6cNx3RG05KEaXrFPsUt1fj3zYerLYcyJCGoK_wtFdtNp7C02zRhnX6lHI6sqWHhmqzMuQV9gNxBEkohSgAaZoWyVVse2Kks4BHgyvO9a4Ed7gVrpzV3P4Nfrx6cCkw-VhvDVjLEcsStwCLA5k-Rt3LEfBXi3N6PfLgdi8ufK08NlliIWTt-LPYOHyG243Myh7M2bagZpPnXKhVvic8a-ZGhMwe79CwiOzuUraqFjlINJMzcB9OOhdNYmv_IIKLaHXuEPNW7"/>
+</div>
+<div class="flex-grow">
+<div class="flex flex-col md:flex-row md:justify-between items-start mb-2">
+<h4 class="text-2xl font-headline font-black uppercase">Senior Backend Architect</h4>
+<span class="font-headline font-bold text-sm border-2 border-primary px-2 py-1">2016 — 2020</span>
+</div>
+<p class="font-headline font-bold text-tertiary mb-3 uppercase tracking-tighter">DataVortex Systems</p>
+<p class="text-sm font-body">Built high-performance financial data ingestors using Rust and Go. Managed a team of 12 engineers across 3 timezones.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-surface-container-lowest p-6 neo-brutalist-border neo-brutalist-shadow-sm flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-4xl mb-4 text-secondary">verified</span>
+<h4 class="font-headline font-bold uppercase mb-2">Security Clearance</h4>
+<p class="text-xs font-body">EU-NATO-CONFIDENTIAL</p>
+</div>
+<div class="bg-surface-container-lowest p-6 neo-brutalist-border neo-brutalist-shadow-sm flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-4xl mb-4 text-tertiary">school</span>
+<h4 class="font-headline font-bold uppercase mb-2">MSc Computer Science</h4>
+<p class="text-xs font-body">ETH ZURICH • 2012</p>
+</div>
+<div class="bg-surface-container-lowest p-6 neo-brutalist-border neo-brutalist-shadow-sm flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-4xl mb-4 text-primary-container" style="font-variation-settings: 'FILL' 1;">terminal</span>
+<h4 class="font-headline font-bold uppercase mb-2">Open Source</h4>
+<p class="text-xs font-body">CONTRIBUTOR TO PYTORCH CORE</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-primary text-white py-12 px-8 border-t-[8px] border-primary-container">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12">
+<div class="space-y-4 max-w-sm">
+<h2 class="text-3xl font-headline font-black uppercase tracking-tighter leading-none italic">Obsidian Ledger</h2>
+<p class="font-body text-sm opacity-60">High-fidelity intelligence engine for the next generation of AI talent acquisition. Built for precision. Scale with confidence.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-12 w-full md:w-auto">
+<div>
+<h5 class="font-headline font-bold uppercase text-primary-container mb-4 text-xs tracking-widest">Platform</h5>
+<ul class="space-y-2 text-sm font-headline font-medium">
+<li><a class="hover:text-tertiary-fixed-dim transition-colors uppercase" href="#">Intelligence</a></li>
+<li><a class="hover:text-tertiary-fixed-dim transition-colors uppercase" href="#">Pipeline</a></li>
+<li><a class="hover:text-tertiary-fixed-dim transition-colors uppercase" href="#">Talent Pool</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-headline font-bold uppercase text-primary-container mb-4 text-xs tracking-widest">Company</h5>
+<ul class="space-y-2 text-sm font-headline font-medium">
+<li><a class="hover:text-tertiary-fixed-dim transition-colors uppercase" href="#">Methodology</a></li>
+<li><a class="hover:text-tertiary-fixed-dim transition-colors uppercase" href="#">Ethics</a></li>
+<li><a class="hover:text-tertiary-fixed-dim transition-colors uppercase" href="#">Contact</a></li>
+</ul>
+</div>
+<div class="col-span-2 md:col-span-1">
+<h5 class="font-headline font-bold uppercase text-primary-container mb-4 text-xs tracking-widest">Status</h5>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-secondary animate-pulse rounded-full"></div>
+<span class="text-xs font-headline font-bold uppercase tracking-widest">Core Engine Active v2.4</span>
+</div>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/10 flex justify-between items-center">
+<p class="text-[10px] font-headline font-bold uppercase tracking-[0.2em] opacity-40">© 2024 OBSIDIAN LEDGER. FORM FOLLOWS FUNCTION.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-white/40 hover:text-white cursor-pointer">public</span>
+<span class="material-symbols-outlined text-white/40 hover:text-white cursor-pointer">share</span>
+</div>
+</div>
+</footer>
+</body></html>

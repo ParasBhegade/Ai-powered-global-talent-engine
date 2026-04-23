@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Obsidian Ledger | Intelligence Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#a8c6ff",
+                        "on-tertiary-fixed": "#1a1a1a",
+                        "on-background": "#1a1a1a",
+                        "surface-variant": "#e8e3da",
+                        "on-primary-fixed": "#1a1a1a",
+                        "on-error-container": "#93000a",
+                        "surface": "#f5f0e8",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#1a1a1a",
+                        "secondary": "#e63b2e",
+                        "outline": "#1a1a1a",
+                        "on-tertiary-container": "#1a1a1a",
+                        "primary-container": "#ffcc00",
+                        "inverse-surface": "#1a1a1a",
+                        "primary-fixed": "#ffcc00",
+                        "on-secondary-fixed": "#1a1a1a",
+                        "error": "#cc0000",
+                        "primary": "#1a1a1a",
+                        "on-surface-variant": "#4a4a4a",
+                        "on-surface": "#1a1a1a",
+                        "background": "#f5f0e8",
+                        "inverse-primary": "#f5f0e8",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#0055ff",
+                        "surface-container-high": "#e8e3da",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f2ede5",
+                        "surface-container-highest": "#e2ddd4",
+                        "secondary-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f5f0e8",
+                        "tertiary-container": "#d6e3ff",
+                        "on-secondary": "#1a1a1a",
+                        "on-secondary-container": "#1a1a1a",
+                        "surface-container": "#eee9e0",
+                        "secondary-fixed-dim": "#ffb3ab",
+                        "surface-dim": "#d6d1c9",
+                        "on-primary-container": "#1a1a1a",
+                        "primary-fixed-dim": "#e6b800",
+                        "secondary-fixed": "#ffdad6",
+                        "on-secondary-fixed-variant": "#1a1a1a",
+                        "tertiary-fixed": "#d6e3ff",
+                        "surface-tint": "#1a1a1a",
+                        "surface-bright": "#faf7f2",
+                        "on-primary-fixed-variant": "#1a1a1a",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#d0cbc3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neo-shadow {
+            box-shadow: 6px 6px 0px 0px #1a1a1a;
+        }
+        .neo-shadow-sm {
+            box-shadow: 3px 3px 0px 0px #1a1a1a;
+        }
+        .neo-shadow-blue {
+            box-shadow: 6px 6px 0px 0px #0055ff;
+        }
+        .neo-shadow-yellow {
+            box-shadow: 6px 6px 0px 0px #ffcc00;
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-primary min-h-screen">
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#0b1325]/70 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
+<div class="flex items-center gap-8">
+<span class="text-xl font-extrabold text-[#dee5ff] tracking-tight font-headline">Obsidian Ledger</span>
+<div class="hidden md:flex gap-6">
+<a class="text-[#a3a6ff] border-b-2 border-[#6063ee] pb-1 font-headline font-extrabold tracking-[-0.02em] transition-colors" href="#">Intelligence</a>
+<a class="text-[#a3aac4] hover:text-[#dee5ff] font-headline font-extrabold tracking-[-0.02em] transition-colors" href="#">Candidates</a>
+<a class="text-[#a3aac4] hover:text-[#dee5ff] font-headline font-extrabold tracking-[-0.02em] transition-colors" href="#">Pipeline</a>
+<a class="text-[#a3aac4] hover:text-[#dee5ff] font-headline font-extrabold tracking-[-0.02em] transition-colors" href="#">Discovery</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:block relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#a3aac4]">search</span>
+<input class="bg-[#131b2e] border-none text-[#dee5ff] pl-10 pr-4 py-1.5 focus:ring-1 focus:ring-[#a3a6ff] placeholder:text-[#a3aac4] text-sm" placeholder="Search Intel..." type="text"/>
+</div>
+<button class="text-[#a3aac4] hover:text-[#dee5ff] scale-95 duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-[#a3aac4] hover:text-[#dee5ff] scale-95 duration-200">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-[#a3a6ff]" data-alt="Close-up portrait of a professional man with sharp features against a minimalist studio background with cool lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKhS6YemB8Ya8AZSF-RK5x5huqDFqjGm5fU7xGjn6mbPtRP0_wdVQFIS-X47TCnEGDDsrnFCqtViG5MxlBk5gD1g85Oabw9IYudHOSEKIt7dyuhaNDjnPscf2t3oOHAnws7olX_UyctgcyROjBLAog5jejTBJaPER-XreFTqsIskSCYIBgKq0rMx_FN7xz0xMEkGNbgxSq2TiKKahdYhuCqFb3rc5bTz6yezLh-zZikBZR1dRcUC6Mmm36dxBsKcg8v_cfOfADcMTm"/>
+</div>
+</nav>
+<aside class="fixed left-0 top-0 h-full flex flex-col p-4 gap-6 bg-[#131b2e] w-64 z-40 pt-20">
+<div class="flex items-center gap-3 px-2 border-b border-[#222a3d] pb-6">
+<div class="w-10 h-10 bg-[#222a3d] flex items-center justify-center">
+<span class="material-symbols-outlined text-[#ffcc00]">bolt</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-[#dee5ff] font-headline">AI Core</h3>
+<p class="text-[10px] text-[#a3aac4] uppercase tracking-widest">V2.4 Active</p>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-[#222a3d] text-[#a3a6ff] font-headline font-semibold text-sm transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] font-headline font-semibold text-sm transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Analytics
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] font-headline font-semibold text-sm transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">group</span>
+                Talent Pool
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] font-headline font-semibold text-sm transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</div>
+<div class="mt-auto flex flex-col gap-4">
+<button class="bg-[#ffcc00] text-[#1a1a1a] font-headline font-bold py-3 px-4 flex items-center justify-center gap-2 hover:bg-[#e6b800] transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+                Source Talent
+            </button>
+<a class="flex items-center gap-3 px-4 py-3 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] font-headline font-semibold text-sm" href="#">
+<span class="material-symbols-outlined">help_center</span>
+                Support
+            </a>
+</div>
+</aside>
+<main class="page-container ml-64 pt-24 px-8 pb-12">
+<header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h1 class="font-headline font-bold text-6xl uppercase tracking-tighter leading-none mb-2">Intelligence</h1>
+<p class="text-xl font-headline font-medium text-tertiary">Real-time talent engine metrics &amp; cluster analysis.</p>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-2 border-2 border-primary font-headline font-bold uppercase neo-shadow-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                    Generate Report
+                </button>
+<button class="px-6 py-2 bg-primary text-background font-headline font-bold uppercase neo-shadow-blue hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                    System Refresh
+                </button>
+</div>
+</header>
+<div class="grid grid-cols-12 gap-6">
+<div class="col-span-12 md:col-span-4 bg-primary-container border-2 border-primary p-6 neo-shadow relative overflow-hidden h-[300px] flex flex-col justify-between">
+<div class="relative z-10">
+<span class="bg-primary text-background px-3 py-1 font-headline font-bold uppercase text-xs tracking-widest">Active Nodes</span>
+<h2 class="text-8xl font-headline font-bold tracking-tighter mt-4">12.4k</h2>
+<p class="font-headline font-bold uppercase mt-2 border-t-2 border-primary pt-2">+14% Efficiency Increase</p>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[200px]" style="font-variation-settings: 'FILL' 1;">hub</span>
+</div>
+</div>
+<div class="col-span-12 md:col-span-8 bg-background border-2 border-primary p-6 neo-shadow">
+<div class="flex justify-between items-start mb-6">
+<h3 class="font-headline font-bold text-2xl uppercase italic">Cluster Density</h3>
+<span class="material-symbols-outlined text-tertiary">legend_toggle</span>
+</div>
+<div class="h-48 w-full flex items-end gap-2 border-b-2 border-primary">
+<div class="flex-1 bg-primary h-[40%] hover:bg-tertiary transition-colors relative group">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white px-2 py-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity">40%</span>
+</div>
+<div class="flex-1 bg-primary h-[70%] hover:bg-tertiary transition-colors relative group">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white px-2 py-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity">70%</span>
+</div>
+<div class="flex-1 bg-secondary h-[95%] hover:bg-primary transition-colors relative group">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 bg-secondary text-white px-2 py-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity">95%</span>
+</div>
+<div class="flex-1 bg-primary h-[55%] hover:bg-tertiary transition-colors relative group">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white px-2 py-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity">55%</span>
+</div>
+<div class="flex-1 bg-tertiary h-[85%] hover:bg-primary transition-colors relative group">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 bg-tertiary text-white px-2 py-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity">85%</span>
+</div>
+<div class="flex-1 bg-primary h-[30%] hover:bg-tertiary transition-colors relative group">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white px-2 py-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity">30%</span>
+</div>
+<div class="flex-1 bg-primary h-[65%] hover:bg-tertiary transition-colors relative group">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white px-2 py-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity">65%</span>
+</div>
+</div>
+<div class="flex justify-between mt-2 font-headline font-bold text-xs uppercase">
+<span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span><span>Q5</span><span>Q6</span><span>Q7</span>
+</div>
+</div>
+<div class="col-span-12 md:col-span-3 bg-secondary border-2 border-primary p-6 neo-shadow text-white">
+<h3 class="font-headline font-bold text-xl mb-4 uppercase tracking-tighter">Threat Alert</h3>
+<p class="font-body text-sm leading-tight mb-8">Redundancy detected in Engineering cluster. 42 profiles flagged for re-indexing.</p>
+<div class="bg-primary p-4 border border-white/20">
+<span class="block text-xs uppercase opacity-60 font-bold mb-1">Status</span>
+<span class="block text-lg font-headline font-bold">Critical Path</span>
+</div>
+</div>
+<div class="col-span-12 md:col-span-6 bg-surface-container-high border-2 border-primary p-6 neo-shadow">
+<h3 class="font-headline font-bold text-2xl uppercase mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">groups</span>
+                    Talent Velocity
+                </h3>
+<div class="space-y-4">
+<div class="flex items-center gap-4">
+<img alt="Candidate" class="w-12 h-12 border-2 border-primary" data-alt="Portrait of a young tech professional with glasses in a minimalist bright office setting with sharp shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1TIFJm5nFLio9WgD5zXIEY9rhMlHQS1Qm2bZX8RNa41mQIBq_d3E3ITijqdw7A-NCJri1JzdysRVn8wFijpWsHjzbmxlLFHa6PwNLr-pMn07soS4X2BxEtGlJIVXpONuMMK9ojeUSC_wYRgJs4GmbI5Pqo6JEZ-FtfNXnDvgV7HdaCGsjHRQnfaUxMVUY62sv-uqEIawvMyw7fja9vzV56zPbF_kCi6O8heV2vY2SI6fLq9FoO4Mo_WAy5zJxpnSrl7TjPIfn9q3F"/>
+<div class="flex-1">
+<div class="flex justify-between items-center">
+<span class="font-headline font-bold text-sm">Marcus Chen</span>
+<span class="text-[10px] bg-tertiary text-white px-2 py-0.5 font-bold uppercase">High Match</span>
+</div>
+<div class="w-full bg-primary/10 h-2 mt-1">
+<div class="bg-tertiary h-full w-[88%]"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<img alt="Candidate" class="w-12 h-12 border-2 border-primary" data-alt="Close up of a creative director in a high-contrast black and white portrait with sharp lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkpcj-hcM-jIlXuiruT_Py8tMyPfQ_6RCfSjwFd-wSuLjZv1H1gvK-IKQJkPNNA3pXRnBVaj7rumaQUA_auj9ZwazfyuTG-4NBe80cYoyFzMFzgFglFt2k7Bfy-GLz6aDjg_19PV4uUPoLGrjf7r2XSTfocyldrBX45eqLnJPzliF2Cnwofu85pg6awo0boF_q-reqEs6TxIz1LBrrzzPF9vIny0Ku5D6x4Aw9qQ1lq_BpCxuIBfqEAxhk_cHbWPTNQWzQbbMoKUnD"/>
+<div class="flex-1">
+<div class="flex justify-between items-center">
+<span class="font-headline font-bold text-sm">Sarah Jenkins</span>
+<span class="text-[10px] bg-tertiary text-white px-2 py-0.5 font-bold uppercase">High Match</span>
+</div>
+<div class="w-full bg-primary/10 h-2 mt-1">
+<div class="bg-tertiary h-full w-[92%]"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<img alt="Candidate" class="w-12 h-12 border-2 border-primary" data-alt="Confident senior developer looking away in a bright architectural setting with geometric shapes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBD1ghzm5Buc9Jhb5iim--3FVjX43_fpGWXRjHK7r4dgmD_s-fXKpeVWjTyEjn7cT_h5QVVRrFa9hD1ASfJuv0OAkgwqFCX4i0eseZGkLmzFfd9pbOBxq-Py7mE7LsruJnG9a331delqxNBBRVw9U-lUkx6jT3_p_WVgMcmpLFVApTVfNci01OeswgfUF4yp1tV2DTnLuYaZq4n0cglGucvnzaNSGwbtiwNA7hzecF_J1Dc_pX_t-fjnew9ibXqIsWt6jhNBnVsnLiw"/>
+<div class="flex-1">
+<div class="flex justify-between items-center">
+<span class="font-headline font-bold text-sm">Alex Rivera</span>
+<span class="text-[10px] bg-primary text-white px-2 py-0.5 font-bold uppercase">Moderate Match</span>
+</div>
+<div class="w-full bg-primary/10 h-2 mt-1">
+<div class="bg-primary h-full w-[74%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-3 bg-tertiary border-2 border-primary p-6 neo-shadow text-white flex flex-col justify-between">
+<span class="material-symbols-outlined text-4xl">radar</span>
+<div>
+<h3 class="font-headline font-bold text-3xl leading-none uppercase mb-2">Discovery Phase</h3>
+<p class="text-xs uppercase font-bold tracking-widest opacity-80 italic">Mapping Dark Talent Clusters...</p>
+</div>
+<button class="w-full mt-4 py-2 border-2 border-white text-white font-headline font-bold uppercase hover:bg-white hover:text-tertiary transition-colors">
+                    Expand Search
+                </button>
+</div>
+<div class="col-span-12 md:col-span-7 bg-background border-2 border-primary p-0 neo-shadow grid grid-cols-2">
+<div class="p-6 border-r-2 border-primary">
+<h4 class="font-headline font-bold uppercase text-xs mb-4 opacity-60">System Throughput</h4>
+<div class="flex items-end gap-1">
+<div class="w-4 bg-primary h-8"></div>
+<div class="w-4 bg-primary h-12"></div>
+<div class="w-4 bg-primary h-10"></div>
+<div class="w-4 bg-tertiary h-16"></div>
+<div class="w-4 bg-primary h-12"></div>
+<div class="w-4 bg-primary h-9"></div>
+</div>
+<div class="mt-4">
+<span class="text-4xl font-headline font-bold">186</span>
+<span class="text-xs font-bold ml-1">REQ/S</span>
+</div>
+</div>
+<div class="p-6 bg-primary-container">
+<h4 class="font-headline font-bold uppercase text-xs mb-4 opacity-60">Success Ratio</h4>
+<div class="relative w-24 h-24 mx-auto">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 36 36">
+<path class="text-primary/10" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
+<path class="text-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="82, 100" stroke-linecap="butt" stroke-width="4"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="font-headline font-extrabold text-2xl italic">82%</span>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-5 bg-background border-2 border-primary p-6 neo-shadow">
+<h3 class="font-headline font-bold text-xl uppercase mb-4 italic">Geospatial Focus</h3>
+<div class="relative h-48 bg-surface-container-highest border border-primary group">
+<div class="absolute inset-0 grayscale opacity-40 hover:opacity-80 transition-opacity">
+<img class="w-full h-full object-cover" data-alt="Stylized monochromatic map texture with strong grid lines and geometric shapes representing urban layout" data-location="San Francisco" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDob0AsNhq5Jx_-7ThCBHc_gsvavi1DTjLgV1T5fHPU_SOPJtp4yFiddykHUdNr4e7wwRi3zRrlMYjoOSvVx6QsKZsUrFKdZgaHY9lv1UD2aSsaQpyan24b107yAjefZcbfrTYJHNHLuZKmUPyBZHLxmDxNbEeW7OeYRTsytkWidXCp-RpL7aOJ5SmAizrX9Y97iun_4oxSeKx8r0zU4C-7VzZVFd9GHaUJBVxxsc6iSkrH-tpCdr9Wp8ktKuQz3K5lo1rnF8ZCKgoK"/>
+</div>
+<div class="absolute top-1/4 left-1/3 w-4 h-4 bg-secondary border-2 border-primary animate-pulse"></div>
+<div class="absolute bottom-1/2 right-1/4 w-3 h-3 bg-tertiary border-2 border-primary"></div>
+<div class="absolute bottom-1/4 left-1/2 w-3 h-3 bg-primary border-2 border-primary"></div>
+<div class="absolute bottom-2 left-2 bg-primary text-white text-[10px] px-2 py-1 font-bold uppercase">
+                        North America Grid
+                    </div>
+</div>
+<div class="grid grid-cols-3 mt-4 text-center">
+<div class="border-r border-primary/20">
+<span class="block text-[10px] uppercase font-bold opacity-60">Nodes</span>
+<span class="font-headline font-bold">4.2k</span>
+</div>
+<div class="border-r border-primary/20">
+<span class="block text-[10px] uppercase font-bold opacity-60">Active</span>
+<span class="font-headline font-bold text-tertiary">91%</span>
+</div>
+<div>
+<span class="block text-[10px] uppercase font-bold opacity-60">Trend</span>
+<span class="font-headline font-bold text-secondary">UP</span>
+</div>
+</div>
+</div>
+</div>
+<section class="mt-12">
+<div class="flex items-center gap-4 mb-8">
+<h2 class="font-headline font-bold text-4xl uppercase tracking-tighter">Event Ledger</h2>
+<div class="h-[2px] flex-1 bg-primary"></div>
+</div>
+<div class="space-y-0 border-2 border-primary neo-shadow bg-background">
+<div class="grid grid-cols-12 p-4 border-b border-primary items-center hover:bg-primary-container transition-colors group cursor-pointer">
+<div class="col-span-2 font-headline font-bold text-xs uppercase opacity-60 italic">10:42:15 AM</div>
+<div class="col-span-8 font-headline font-bold">Injected 500+ Engineering leads from Meta/Google cluster</div>
+<div class="col-span-2 text-right">
+<span class="px-3 py-1 bg-primary text-white font-headline font-bold text-[10px] uppercase group-hover:bg-tertiary">Success</span>
+</div>
+</div>
+<div class="grid grid-cols-12 p-4 border-b border-primary items-center hover:bg-primary-container transition-colors group cursor-pointer">
+<div class="col-span-2 font-headline font-bold text-xs uppercase opacity-60 italic">09:15:33 AM</div>
+<div class="col-span-8 font-headline font-bold">Talent Engine re-calibration — Adjusted match weight by 4.2%</div>
+<div class="col-span-2 text-right">
+<span class="px-3 py-1 bg-primary text-white font-headline font-bold text-[10px] uppercase group-hover:bg-tertiary">Updated</span>
+</div>
+</div>
+<div class="grid grid-cols-12 p-4 items-center hover:bg-primary-container transition-colors group cursor-pointer">
+<div class="col-span-2 font-headline font-bold text-xs uppercase opacity-60 italic">07:30:01 AM</div>
+<div class="col-span-8 font-headline font-bold">Critical redundancy resolved in FinTech cluster</div>
+<div class="col-span-2 text-right">
+<span class="px-3 py-1 bg-secondary text-white font-headline font-bold text-[10px] uppercase group-hover:bg-primary">Resolved</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<div class="fixed bottom-8 right-8 z-50">
+<button class="w-16 h-16 bg-[#ffcc00] border-4 border-primary text-primary flex items-center justify-center neo-shadow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all group">
+<span class="material-symbols-outlined text-4xl group-hover:rotate-90 transition-transform" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</button>
+</div>
+</body></html>

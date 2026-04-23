@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Intelligence Dashboard | Obsidian Ledger</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Manrope & Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "surface-container": "#171f32",
+                  "secondary-fixed-dim": "#bac6e9",
+                  "on-secondary-container": "#acb8da",
+                  "surface-container-lowest": "#060e20",
+                  "inverse-on-surface": "#283044",
+                  "tertiary-container": "#00855b",
+                  "on-secondary": "#24304b",
+                  "surface-container-low": "#131b2e",
+                  "surface-container-highest": "#2d3448",
+                  "secondary-container": "#3d4966",
+                  "on-error": "#690005",
+                  "surface-container-high": "#222a3d",
+                  "tertiary": "#4edea2",
+                  "on-tertiary": "#003824",
+                  "on-primary": "#232577",
+                  "outline-variant": "#464554",
+                  "surface-bright": "#31394d",
+                  "on-primary-fixed-variant": "#3b3d8f",
+                  "tertiary-fixed": "#6ffbbd",
+                  "surface-tint": "#c0c1ff",
+                  "secondary-fixed": "#d9e2ff",
+                  "on-secondary-fixed-variant": "#3b4663",
+                  "primary-fixed-dim": "#c0c1ff",
+                  "surface-dim": "#0b1325",
+                  "on-primary-container": "#fffbff",
+                  "secondary": "#bac6e9",
+                  "outline": "#908fa0",
+                  "on-tertiary-container": "#f4fff6",
+                  "surface": "#0b1325",
+                  "error-container": "#93000a",
+                  "on-tertiary-fixed-variant": "#005236",
+                  "surface-variant": "#2d3448",
+                  "on-primary-fixed": "#0a0763",
+                  "on-error-container": "#ffdad6",
+                  "on-background": "#dae2fc",
+                  "tertiary-fixed-dim": "#4edea2",
+                  "on-tertiary-fixed": "#002113",
+                  "inverse-primary": "#5356a8",
+                  "background": "#0b1325",
+                  "on-surface": "#dae2fc",
+                  "on-surface-variant": "#c7c5d7",
+                  "primary": "#c0c1ff",
+                  "error": "#ffb4ab",
+                  "primary-fixed": "#e1e0ff",
+                  "on-secondary-fixed": "#0e1b35",
+                  "primary-container": "#696cc0",
+                  "inverse-surface": "#dae2fc"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.125rem",
+                  "lg": "0.25rem",
+                  "xl": "0.5rem",
+                  "full": "0.75rem"
+          },
+          "fontFamily": {
+                  "headline": ["Manrope"],
+                  "body": ["Inter"],
+                  "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .glass-card {
+      background: rgba(23, 31, 50, 0.7);
+      backdrop-filter: blur(12px);
+    }
+    .ghost-border {
+      outline: 1px solid rgba(144, 143, 160, 0.15);
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .btn-cta {
+      background: linear-gradient(135deg, #c0c1ff 0%, #696cc0 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-cta:hover {
+      box-shadow: 0 0 15px rgba(192, 193, 255, 0.4);
+      transform: translateY(-1px);
+    }
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+    }
+    .well-input {
+      background-color: #000000;
+      border: 1px solid rgba(144, 143, 160, 0.15);
+    }
+    .well-input:focus {
+      border-color: rgba(192, 193, 255, 0.4);
+      outline: none;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased">
+<!-- TopNavBar Implementation -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#0b1325]/70 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
+<div class="flex items-center gap-8">
+<div class="text-xl font-extrabold text-[#dee5ff] tracking-tight font-headline">
+        Obsidian Ledger
+      </div>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="font-headline font-extrabold tracking-[-0.02em] text-[#a3a6ff] border-b-2 border-[#6063ee] pb-1" href="#">Intelligence</a>
+<a class="font-headline font-extrabold tracking-[-0.02em] text-[#a3aac4] hover:text-[#dee5ff] transition-colors" href="#">Candidates</a>
+<a class="font-headline font-extrabold tracking-[-0.02em] text-[#a3aac4] hover:text-[#dee5ff] transition-colors" href="#">Pipeline</a>
+<a class="font-headline font-extrabold tracking-[-0.02em] text-[#a3aac4] hover:text-[#dee5ff] transition-colors" href="#">Discovery</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+<input class="well-input pl-10 pr-4 py-1.5 rounded-full text-sm w-64 bg-black/40" placeholder="Search engine..." type="text"/>
+</div>
+<button class="text-[#a3aac4] hover:text-[#dee5ff] transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-[#a3aac4] hover:text-[#dee5ff] transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden ghost-border">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="close-up portrait of a professional woman with tech-inspired glasses, soft dramatic studio lighting, deep blue background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPnIW_oHYMu2rerUgDQRrZqyzXTmvDuORloxnZpxG7vmkoGprC7wPxQ01PFRPSYgCQb7AGNczBzzjpoCCHRuYyJMC0I7DW5jBXy631NpQ-jLrg5axpl-5PG1p5jdkfegGpk6wI4aUm0gYGl7_eW_UV7Ir2N9-b_Py_MgwVEjrn03fOAJbMM7MTB502GeQwYuYx97pktjABL0FfUKkgGZdVGUw6PGGw_JPP8G5tljYLyLYciXJeCT4Hvxw1TvvhJaNEx8SUbHyXsTrD"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar Implementation -->
+<aside class="fixed left-0 top-0 h-full hidden lg:flex flex-col p-4 gap-6 bg-[#131b2e] w-64 pt-20 z-40 transition-all duration-300 ease-in-out">
+<div class="flex items-center gap-3 px-2 mb-4">
+<div class="h-10 w-10 rounded-xl bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-[#dee5ff] font-headline">AI Core</h3>
+<p class="text-xs text-outline font-semibold">V2.4 Active</p>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-2.5 bg-[#222a3d] text-[#a3a6ff] rounded-md font-semibold text-sm" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+        Dashboard
+      </a>
+<a class="flex items-center gap-3 px-4 py-2.5 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] rounded-md font-semibold text-sm transition-all" href="#">
+<span class="material-symbols-outlined">analytics</span>
+        Analytics
+      </a>
+<a class="flex items-center gap-3 px-4 py-2.5 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] rounded-md font-semibold text-sm transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+        Talent Pool
+      </a>
+<a class="flex items-center gap-3 px-4 py-2.5 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] rounded-md font-semibold text-sm transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+        Settings
+      </a>
+</div>
+<div class="mt-auto flex flex-col gap-4">
+<button class="btn-cta w-full py-3 rounded-xl text-on-primary font-bold text-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+        Source Talent
+      </button>
+<a class="flex items-center gap-3 px-4 py-2.5 text-[#a3aac4] hover:bg-[#171f32] hover:text-[#dee5ff] rounded-md font-semibold text-sm transition-all" href="#">
+<span class="material-symbols-outlined">help_center</span>
+        Support
+      </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-64 pt-24 px-6 pb-12">
+<div class="max-w-[1400px] mx-auto page-container">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+<div>
+<h1 class="text-4xl font-extrabold text-on-surface font-headline tracking-[-0.02em] mb-2">Engine Intelligence</h1>
+<p class="text-on-surface-variant font-medium">Real-time analysis of neural matching and talent acquisition velocity.</p>
+</div>
+<div class="flex gap-3">
+<div class="bg-surface-container-low rounded-lg px-4 py-2 ghost-border flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-sm font-semibold text-tertiary">MATCHING SYSTEM STABLE</span>
+</div>
+<div class="bg-surface-container-low rounded-lg px-4 py-2 ghost-border flex items-center gap-2">
+<span class="text-sm text-outline">LATENCY:</span>
+<span class="text-sm font-semibold text-primary">12ms</span>
+</div>
+</div>
+</div>
+<!-- Bento Grid -->
+<div class="bento-grid">
+<!-- Primary Metric: Matching Velocity -->
+<div class="glass-card col-span-12 lg:col-span-8 p-6 rounded-xl relative overflow-hidden group">
+<div class="flex justify-between items-start mb-8">
+<div>
+<h2 class="text-xl font-extrabold text-on-surface font-headline mb-1">Matching Velocity</h2>
+<p class="text-sm text-outline">Daily candidate-to-role semantic alignment frequency</p>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold">24H RANGE</span>
+</div>
+</div>
+<div class="h-[280px] w-full">
+<canvas id="velocityChart"></canvas>
+</div>
+</div>
+<!-- AI Match Score Breakdown -->
+<div class="glass-card col-span-12 lg:col-span-4 p-6 rounded-xl flex flex-col justify-between">
+<div>
+<h2 class="text-xl font-extrabold text-on-surface font-headline mb-1">Match Quality</h2>
+<p class="text-sm text-outline">Distribution of neural alignment scores</p>
+</div>
+<div class="h-[200px] flex items-center justify-center relative my-4">
+<canvas id="qualityChart"></canvas>
+<div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+<span class="text-3xl font-extrabold text-on-surface font-headline">88.4%</span>
+<span class="text-xs text-outline uppercase tracking-wider font-bold">Avg Score</span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-sm">
+<span class="flex items-center gap-2 text-outline">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                High Precision
+              </span>
+<span class="text-on-surface font-semibold">62%</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="flex items-center gap-2 text-outline">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                Strategic Fit
+              </span>
+<span class="text-on-surface font-semibold">24%</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="flex items-center gap-2 text-outline">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+                Emerging Talent
+              </span>
+<span class="text-on-surface font-semibold">14%</span>
+</div>
+</div>
+</div>
+<!-- Key Stats Mini Bento -->
+<div class="glass-card col-span-12 md:col-span-3 p-6 rounded-xl">
+<p class="text-xs text-outline font-bold uppercase tracking-widest mb-4">Total Scanned</p>
+<div class="flex items-end justify-between">
+<h3 class="text-3xl font-extrabold text-on-surface font-headline">14.2k</h3>
+<span class="text-tertiary text-sm font-bold flex items-center">+12%</span>
+</div>
+</div>
+<div class="glass-card col-span-12 md:col-span-3 p-6 rounded-xl">
+<p class="text-xs text-outline font-bold uppercase tracking-widest mb-4">Interviews Set</p>
+<div class="flex items-end justify-between">
+<h3 class="text-3xl font-extrabold text-on-surface font-headline">842</h3>
+<span class="text-tertiary text-sm font-bold flex items-center">+5.2%</span>
+</div>
+</div>
+<div class="glass-card col-span-12 md:col-span-3 p-6 rounded-xl">
+<p class="text-xs text-outline font-bold uppercase tracking-widest mb-4">AI Confidence</p>
+<div class="flex items-end justify-between">
+<h3 class="text-3xl font-extrabold text-on-surface font-headline">96.8%</h3>
+<span class="text-primary text-sm font-bold flex items-center">STABLE</span>
+</div>
+</div>
+<div class="glass-card col-span-12 md:col-span-3 p-6 rounded-xl">
+<p class="text-xs text-outline font-bold uppercase tracking-widest mb-4">Token Burn</p>
+<div class="flex items-end justify-between">
+<h3 class="text-3xl font-extrabold text-on-surface font-headline">1.4M</h3>
+<span class="text-error text-sm font-bold flex items-center">-2.1%</span>
+</div>
+</div>
+<!-- Recent Match Feed -->
+<div class="glass-card col-span-12 lg:col-span-7 p-6 rounded-xl overflow-hidden">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-extrabold text-on-surface font-headline">Intelligence Feed</h2>
+<button class="text-primary text-sm font-bold hover:underline">View Ledger</button>
+</div>
+<div class="space-y-6">
+<div class="flex gap-4 p-3 rounded-lg hover:bg-surface-container-high transition-colors">
+<img alt="Candidate" class="w-12 h-12 rounded-lg object-cover" data-alt="minimalist studio headshot of a developer in a dark turtleneck, professional lighting, modern corporate style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_dxUWkif6Va9D2g9gvvbDWlV140gS2nXJ_88Kwkqaiw3wrAAedksXPJOlw9cPOWUX09XrMImfRCOiqHyxao_NVn3YUoj63dFsHk3HIRZ4OcNGPOnctRE5yClYpUuQIGhJLtkogbHG8OZcQa-IqtBdYc20U_Mx0K0uLj6v6MZPhSuqORG7MjkDur0h4vwfp3VFOWV4EW3VyD59NqCTHuio8La9Nm2LdKZS5qklQvza_uczqAAL-GZ1H3x19BRC6-t4YpvT6DJZ9bMg"/>
+<div class="flex-1">
+<div class="flex justify-between mb-1">
+<h4 class="font-bold text-[#dee5ff]">Marcus Chen</h4>
+<span class="text-xs font-bold text-tertiary bg-tertiary/10 px-2 py-0.5 rounded">98 MATCH</span>
+</div>
+<p class="text-sm text-outline">Matched for <span class="text-primary">Principal LLM Engineer</span> at Genesis Lab.</p>
+<div class="flex gap-3 mt-2">
+<span class="text-[10px] font-bold uppercase text-outline tracking-wider">PYTHON</span>
+<span class="text-[10px] font-bold uppercase text-outline tracking-wider">PYTORCH</span>
+<span class="text-[10px] font-bold uppercase text-outline tracking-wider">CUDA</span>
+</div>
+</div>
+</div>
+<div class="flex gap-4 p-3 rounded-lg hover:bg-surface-container-high transition-colors">
+<img alt="Candidate" class="w-12 h-12 rounded-lg object-cover" data-alt="professional portrait of a tech leader, soft lighting, creative agency background, modern aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWIbBsZZO1JPgL4rWKpIFKc5pcyGc_fGIzdpQ6iQawrSWoZYfP8ZyynSFFIhb_mhwljvSQGNYiwd9oRk5cVU0tPEB2QQ9jk3JkezcaK_4WorjPvcEjMnyys1HXVZ92IccEKszp3HXNEVcCkhqVUgOZleU3eehpkA5Lt6iCPvvzV6jKAyTvicAhRet13E-Rz6nPoAH0D88-Nw244AL7QLcJ-JBw_sE33DxErAAKNut0pEcTu3YoxEYGJBcDUATD3IUlYXs0akj8PzNE"/>
+<div class="flex-1">
+<div class="flex justify-between mb-1">
+<h4 class="font-bold text-[#dee5ff]">Elena Rodriguez</h4>
+<span class="text-xs font-bold text-tertiary bg-tertiary/10 px-2 py-0.5 rounded">94 MATCH</span>
+</div>
+<p class="text-sm text-outline">Top selection for <span class="text-primary">Design Director</span> roles in London.</p>
+<div class="flex gap-3 mt-2">
+<span class="text-[10px] font-bold uppercase text-outline tracking-wider">UX/UI</span>
+<span class="text-[10px] font-bold uppercase text-outline tracking-wider">STRATEGY</span>
+<span class="text-[10px] font-bold uppercase text-outline tracking-wider">AI TOOLS</span>
+</div>
+</div>
+</div>
+<div class="flex gap-4 p-3 rounded-lg hover:bg-surface-container-high transition-colors">
+<img alt="Candidate" class="w-12 h-12 rounded-lg object-cover" data-alt="candid professional portrait of a senior engineer in a high-tech office environment, cool tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3-Y_zl-TiYfcnsot4H3ZeXWRWUiL4KOTKI1ZTZild7ddOdbJFY2Rfac11sPY41v0ku65GVAN2f39hM6WntQsfc7ywLwd_3Y5x7dbiAt8XnFK9QO4vlhY4H7JX8ivQHyeMYAGpIapVxb0bOruWua2_-QsWO2JW5d_ZVc9U_RyVgr3LCRMCJLFQo8v2ci6aNoDRtK1j6e9GZNEzwcmyOuA9aSOosD5-RhfvNR0BatUBKahWT0x8aeroRE-xaSpd93A1YiCsX17Hz_PC"/>
+<div class="flex-1">
+<div class="flex justify-between mb-1">
+<h4 class="font-bold text-[#dee5ff]">Samuel Brooks</h4>
+<span class="text-xs font-bold text-tertiary bg-tertiary/10 px-2 py-0.5 rounded">91 MATCH</span>
+</div>
+<p class="text-sm text-outline">Neural bridge active for <span class="text-primary">DevOps Lead</span> at Spectral.</p>
+<div class="flex gap-3 mt-2">
+<span class="text-[10px] font-bold uppercase text-outline tracking-wider">KUBERNETES</span>
+<span class="text-[10px] font-bold uppercase text-outline tracking-wider">AWS</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- System Health / Node Map Placeholder -->
+<div class="glass-card col-span-12 lg:col-span-5 p-6 rounded-xl relative group">
+<h2 class="text-xl font-extrabold text-on-surface font-headline mb-4">Neural Network Map</h2>
+<div class="w-full h-full min-h-[300px] rounded-lg bg-surface-container-lowest flex items-center justify-center overflow-hidden relative">
+<!-- Simulated Mesh Background -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(#a3a6ff 0.5px, transparent 0.5px); background-size: 20px 20px;"></div>
+<div class="relative z-10 flex flex-col items-center gap-4">
+<div class="w-32 h-32 rounded-full border-4 border-dashed border-primary/30 flex items-center justify-center animate-spin-slow">
+<div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">hub</span>
+</div>
+</div>
+<div class="text-center">
+<p class="text-sm font-bold text-on-surface tracking-tight">Active Engine Nodes: 42</p>
+<p class="text-xs text-outline">Distributed Ledger Synced</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+    // Velocity Chart
+    const ctxVelocity = document.getElementById('velocityChart').getContext('2d');
+    new Chart(ctxVelocity, {
+      type: 'line',
+      data: {
+        labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+        datasets: [{
+          label: 'Matches/Hr',
+          data: [45, 32, 78, 112, 145, 98, 67],
+          borderColor: '#c0c1ff',
+          backgroundColor: 'rgba(192, 193, 255, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHoverRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { grid: { color: 'rgba(144, 143, 160, 0.1)' }, ticks: { color: '#908fa0', font: { family: 'Inter', size: 10 } } },
+          x: { grid: { display: false }, ticks: { color: '#908fa0', font: { family: 'Inter', size: 10 } } }
+        }
+      }
+    });
+
+    // Quality Chart (Donut)
+    const ctxQuality = document.getElementById('qualityChart').getContext('2d');
+    new Chart(ctxQuality, {
+      type: 'doughnut',
+      data: {
+        datasets: [{
+          data: [62, 24, 14],
+          backgroundColor: ['#c0c1ff', '#4edea2', '#3d4966'],
+          borderWidth: 0,
+          cutout: '80%'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } }
+      }
+    });
+  </script>
+</body></html>
