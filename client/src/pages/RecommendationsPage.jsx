@@ -121,8 +121,12 @@ export default function RecommendationsPage() {
   const [pathId, setPathId] = useState(null);
 
   const pId = searchParams.get('path');
-  const score = parseInt(searchParams.get('score') || '0');
-  const total = parseInt(searchParams.get('total') || '0');
+  const urlScore = parseInt(searchParams.get('score') || '0');
+  const urlTotal = parseInt(searchParams.get('total') || '0');
+
+  // These get updated with actual DB values if URL params are 0
+  const [score, setScore] = useState(urlScore);
+  const [total, setTotal] = useState(urlTotal);
   const percent = total > 0 ? Math.round((score / total) * 100) : 0;
 
   const tts = useTTS();
@@ -152,6 +156,9 @@ export default function RecommendationsPage() {
           if (scoreData.results?.length > 0) {
             resolvedScore = scoreData.results[0].score || 0;
             resolvedTotal = scoreData.results[0].total || 0;
+            // Update display state so header shows the real score
+            setScore(resolvedScore);
+            setTotal(resolvedTotal);
           }
         } catch { }
       }

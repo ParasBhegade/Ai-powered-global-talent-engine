@@ -1,13 +1,13 @@
-# AI Talent Recommendation Platform - Project Documentation
+﻿# AI Talent Recommendation Platform - Project Documentation
 
-## 🚀 Overview
+## ðŸš€ Overview
 The **AI Talent Recommendation Platform** is a state-of-the-art career guidance and recruitment ecosystem. It leverages Artificial Intelligence to analyze student skills, aptitudes, and interests to provide personalized career path recommendations and AI-driven interview preparation.
 
 The project is currently in a **Hybrid Phase**, featuring a robust legacy PHP/MySQL engine transitioning into a modern MERN-like stack (React, Node.js, Express, MongoDB).
 
 ---
 
-## 🏗️ Project Architecture
+## ðŸ—ï¸ Project Architecture
 The platform follows a split-module architecture:
 
 ### 1. Modern Module (Future-Proof Stack)
@@ -21,26 +21,26 @@ The platform follows a split-module architecture:
 
 ---
 
-## 📂 Directory Structure
+## ðŸ“‚ Directory Structure
 ```text
 AI-Talent-Recommendation/
-├── client/                 # Modern React Frontend (Vite)
-├── server/                 # Modern Node.js Backend (Express/MongoDB)
-├── database/               # SQL Schemas and DB Connection logic
-├── includes/               # Reusable PHP components (Headers, Navbars)
-├── uploads/                # User-uploaded assets and resumes
-├── assets/                 # CSS/JS/Images for the PHP frontend
-├── pages/                  # PHP-based page templates
-├── config.php              # PHP Database & API Configuration
-├── ai_assistant_api.php    # AI Chat Logic (PHP)
-├── recommendations.php     # Core recommendation engine
-├── Student_dashboard.php   # Student interface
-└── admin_analytics.php     # Admin visualization dashboard
+â”œâ”€â”€ client/                 # Modern React Frontend (Vite)
+â”œâ”€â”€ server/                 # Modern Node.js Backend (Express/MongoDB)
+â”œâ”€â”€ database/               # SQL Schemas and DB Connection logic
+â”œâ”€â”€ includes/               # Reusable PHP components (Headers, Navbars)
+â”œâ”€â”€ uploads/                # User-uploaded assets and resumes
+â”œâ”€â”€ assets/                 # CSS/JS/Images for the PHP frontend
+â”œâ”€â”€ pages/                  # PHP-based page templates
+â”œâ”€â”€ config.php              # PHP Database & API Configuration
+â”œâ”€â”€ ai_assistant_api.php    # AI Chat Logic (PHP)
+â”œâ”€â”€ recommendations.php     # Core recommendation engine
+â”œâ”€â”€ Student_dashboard.php   # Student interface
+â””â”€â”€ admin_analytics.php     # Admin visualization dashboard
 ```
 
 ---
 
-## 💻 Tech Stack & Frameworks
+## ðŸ’» Tech Stack & Frameworks
 
 ### Frontend (User Interface)
 - **Modern**: React 19, Vite, Axios, React Router.
@@ -60,7 +60,7 @@ AI-Talent-Recommendation/
 
 ---
 
-## 🧠 AI Models & Logic
+## ðŸ§  AI Models & Logic
 The platform integrates advanced AI using the following tools:
 
 ### 1. Large Language Models (LLMs)
@@ -74,7 +74,7 @@ The platform integrates advanced AI using the following tools:
 
 ---
 
-## 📊 Business Logic
+## ðŸ“Š Business Logic
 1. **Assessment**: Students take aptitude tests and add their technical/soft skills.
 2. **Recommendation**: The system calculates a "Similarity Score" between user profiles and career requirements.
 3. **Growth**: The AI Assistant provides a roadmap, and the AI Interview tool prepares the user for the industry.
@@ -82,12 +82,49 @@ The platform integrates advanced AI using the following tools:
 
 ---
 
-## 🛡️ Authentication & Security
+## ðŸ›¡ï¸ Authentication & Security
 - **Modern Login**: Uses JWT stored in HTTP-only cookies for the React-Node communication.
 - **Legacy Login**: Uses standard PHP sessions and salted password hashing.
 - **File Uploads**: Managed via `multer` in Node and standard PHP upload handlers, with sanitization for security.
 
 ---
 
-## 🛠️ How it all works together
+## ðŸ› ï¸ How it all works together
 The **React Frontend** communicates with the **Node.js Server** via Axios. Meanwhile, the core career data and historical student records are often synced or queried via the **PHP Backend**, which acts as the stable legacy foundation. This hybrid approach allows for high reliability while adopting modern UI/UX standards.
+---
+
+## Getting Started (For Collaborators)
+
+**Important:** This project uses MongoDB Atlas (cloud database). Each collaborator must create their own .env file - it is never committed to git.
+
+### 1. Clone the repo
+```bash
+git clone https://github.com/ParasBhegade/Ai-powered-global-talent-engine.git
+```
+
+### 2. Set up environment
+```bash
+cd server
+copy .env.example .env
+```
+Edit server/.env and fill in:
+- MONGODB_URI - Atlas connection string (from cloud.mongodb.com)
+- JWT_SECRET - Any long random string
+- GROQ_API_KEY - From console.groq.com
+
+### 3. Install and run
+```bash
+# Terminal 1
+cd server && npm install && npm run dev
+
+# Terminal 2
+cd client && npm install && npm run dev
+```
+
+### Common Mistakes
+
+| Problem | Cause | Fix |
+|---|---|---|
+| No users / can't login | Wrong MONGODB_URI | Use correct Atlas URI |
+| JWT unauthorized | Different JWT_SECRET | Use same secret as server that created accounts |
+| Users missing | Connected to local MongoDB instead of Atlas | Check MONGODB_URI in .env |

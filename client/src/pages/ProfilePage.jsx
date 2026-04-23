@@ -19,9 +19,7 @@ export default function ProfilePage() {
   const fileRef = useRef();
   const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => {
-    fetchProfile();
-  }, []);
+  useEffect(() => { fetchProfile(); }, []);
 
   const fetchProfile = async () => {
     try {
@@ -51,7 +49,7 @@ export default function ProfilePage() {
     }
   };
 
-  // Real profile completion — 6 fields like old PHP
+  // Real profile completion
   const completionFields = {
     fullname: !!form.fullname.trim(),
     phone: !!form.phone.trim(),
@@ -83,7 +81,6 @@ export default function ProfilePage() {
       setTimeout(() => setMsg(''), 3500);
       setIsEditing(false);
       setPhoto(null);
-      // Reload from server to confirm saved
       await fetchProfile();
     } catch (err) {
       setMsg(err.message);
@@ -94,7 +91,6 @@ export default function ProfilePage() {
   const handleCancel = async () => {
     setIsEditing(false);
     setPhoto(null);
-    // Revert to server state
     await fetchProfile();
   };
 
@@ -117,145 +113,207 @@ export default function ProfilePage() {
 
   return (
     <div className="page-container">
-      {/* Header */}
-      <div className="flex flex-wrap justify-between items-start gap-4" style={{ marginBottom: 32 }}>
-        <div className="flex items-center gap-5">
-          <div style={{ position: 'relative' }}>
+
+      {/* ── Profile incomplete alert — TOP ── */}
+      {!isComplete && (
+        <div style={{
+          marginBottom: 20,
+          padding: '12px 18px',
+          borderRadius: 10,
+          background: isLight ? 'rgba(217,119,6,0.08)' : 'rgba(245,158,11,0.08)',
+          border: `1px solid ${isLight ? 'rgba(217,119,6,0.25)' : 'rgba(245,158,11,0.25)'}`,
+          color: isLight ? '#92400E' : '#fbbf24',
+          display: 'flex', flexWrap: 'wrap',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 12
+        }}>
+          <div>
+            <strong style={{ fontSize: 13 }}>Profile incomplete ({progressPercent}%)</strong>
+            <div style={{ fontSize: 12, marginTop: 3, opacity: 0.85 }}>
+              Missing: {Object.entries(completionFields).filter(([, v]) => !v).map(([k]) => k).join(', ')}
+            </div>
+          </div>
+          <button onClick={() => setIsEditing(true)} style={{
+            padding: '6px 14px', borderRadius: 8, border: 'none', cursor: 'pointer',
+            background: isLight ? '#D97706' : '#f59e0b', color: '#fff', fontWeight: 700, fontSize: 12
+          }}>
+            Complete Now
+          </button>
+        </div>
+      )}
+
+      {/* ── Save/error message ── */}
+      {msg && (
+        <div style={{
+          background: msgType === 'success' ? (isLight ? 'rgba(0,108,73,0.1)' : 'rgba(105,246,184,0.1)') : 'rgba(255,107,107,0.1)',
+          color: msgType === 'success' ? emeraldHighlight : '#ff6b6b',
+          padding: '12px 18px', borderRadius: 10, marginBottom: 18, fontWeight: 700, fontSize: 13
+        }}>{msg}</div>
+      )}
+
+      {/* ── Header ── */}
+      <div style={{
+        display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between',
+        alignItems: 'flex-start', gap: 24, marginBottom: 28
+      }}>
+        {/* Left: avatar + info */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 20 }}>
+          {/* Avatar  */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, flexShrink: 0 }}>
             {preview ? (
               <img
-                src={preview}
-                alt="Profile"
-                style={{ width: 80, height: 80, borderRadius: 16, border: `2px solid ${strokeColor}60`, objectFit: 'cover' }}
+                src={preview} alt="Profile"
+                style={{ width: 84, height: 84, borderRadius: 16, objectFit: 'cover', border: `2px solid ${strokeColor}50` }}
               />
             ) : (
-              <div style={{ width: 80, height: 80, borderRadius: 16, background: `linear-gradient(135deg, ${strokeColor}, ${emeraldHighlight})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, fontWeight: 800, color: '#fff' }}>
+              <div style={{ width: 84, height: 84, borderRadius: 16, background: `linear-gradient(135deg, ${strokeColor}, ${emeraldHighlight})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, fontWeight: 800, color: '#fff' }}>
                 {(form.fullname || user?.name || 'U')[0].toUpperCase()}
               </div>
             )}
-
-            {/* Completion badge — only show real % */}
-            {!isEditing && (
-              <div style={{
-                position: 'absolute', bottom: -8, right: -8,
-                backgroundColor: isComplete ? emeraldHighlight : (isLight ? '#D97706' : '#f59e0b'),
-                color: '#fff', fontSize: 10, fontWeight: 800,
-                padding: '3px 7px', borderRadius: 20, boxShadow: '0 4px 6px rgba(0,0,0,0.2)',
-                whiteSpace: 'nowrap'
-              }}>
-                {progressPercent}% {isComplete ? '✓' : ''}
-              </div>
-            )}
-
+            {/* Photo upload button — clean, below avatar */}
             {isEditing && (
               <button
                 type="button"
                 onClick={() => fileRef.current.click()}
-                style={{ position: 'absolute', bottom: -8, right: -8, backgroundColor: strokeColor, color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 7px', borderRadius: 20, border: 'none', cursor: 'pointer' }}
+                style={{
+                  padding: '4px 12px', borderRadius: 8, border: `1px solid ${strokeColor}`,
+                  background: 'transparent', color: strokeColor,
+                  fontSize: 11, fontWeight: 700, cursor: 'pointer'
+                }}
               >
-                UPLOAD
+                Change Photo
               </button>
             )}
             <input ref={fileRef} type="file" accept=".png,.jpg,.jpeg" style={{ display: 'none' }} onChange={handlePhoto} />
           </div>
 
-          <div>
-            <h1 className="text-accent" style={{ fontSize: '28px', marginBottom: 4, letterSpacing: '-0.02em', fontWeight: 800 }}>
+          {/* Name, education, badges */}
+          <div style={{ paddingTop: 4 }}>
+            <h1 className="text-accent" style={{ fontSize: 26, marginBottom: 4, letterSpacing: '-0.02em', fontWeight: 800 }}>
               {form.fullname || user?.name || 'New Candidate'}
             </h1>
-            <p className="text-muted" style={{ fontWeight: 600 }}>
+            <p className="text-muted" style={{ fontWeight: 500, fontSize: 14 }}>
               {form.education || 'Add your educational background'}
-              {form.phone ? ` • ${form.phone}` : ''}
+              {form.phone ? ` · ${form.phone}` : ''}
             </p>
             {careerPath && (
-              <p style={{ color: strokeColor, fontSize: 13, fontWeight: 600, marginTop: 4 }}>
-                🎓 {careerPath.name || ''}
+              <p style={{ color: strokeColor, fontSize: 12, fontWeight: 600, marginTop: 4 }}>
+                {careerPath.name || ''}
               </p>
             )}
-            <div className="flex gap-2 mt-2">
-              <span style={{ backgroundColor: isLight ? '#EBF0FA' : '#3d4966', color: isLight ? '#111C2D' : '#acb8da', padding: '2px 8px', borderRadius: 6, fontSize: 12, fontWeight: 600 }}>Registered</span>
-              <span style={{ backgroundColor: isLight ? 'rgba(0,108,73,0.1)' : 'rgba(78,222,162,0.1)', color: emeraldHighlight, padding: '2px 8px', borderRadius: 6, fontSize: 12, fontWeight: 600 }}>Open to Roles</span>
+            <div className="flex gap-2" style={{ marginTop: 10 }}>
+              <span style={{ backgroundColor: isLight ? '#EBF0FA' : '#3d4966', color: isLight ? '#111C2D' : '#acb8da', padding: '3px 10px', borderRadius: 6, fontSize: 11, fontWeight: 600 }}>Registered</span>
+              <span style={{ backgroundColor: isLight ? 'rgba(0,108,73,0.1)' : 'rgba(78,222,162,0.1)', color: emeraldHighlight, padding: '3px 10px', borderRadius: 6, fontSize: 11, fontWeight: 600 }}>Open to Roles</span>
             </div>
           </div>
         </div>
 
-        {/* Profile Completion Bar */}
-        <div style={{ textAlign: 'right', minWidth: 200 }}>
-          <div style={{ fontSize: 13, color: 'var(--on-surface-variant)', marginBottom: 6, fontWeight: 600 }}>Profile Completion</div>
-          <div style={{ width: '100%', height: 10, backgroundColor: isLight ? '#e2e8f0' : 'rgba(255,255,255,0.06)', borderRadius: 8, overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: `${progressPercent}%`, background: `linear-gradient(90deg, ${strokeColor}, ${emeraldHighlight})`, borderRadius: 8, transition: 'width 600ms ease' }} />
+        {/* Right: completion bar + edit button */}
+        <div style={{ minWidth: 180, textAlign: 'right' }}>
+          <div style={{ fontSize: 12, color: 'var(--on-surface-variant)', marginBottom: 6, fontWeight: 600 }}>
+            Profile Completion
           </div>
-          <div style={{ marginTop: 6, fontWeight: 800, color: isComplete ? emeraldHighlight : '#f59e0b', fontSize: 14 }}>{progressPercent}%</div>
-          <div className="flex gap-3 mt-2 justify-end">
-            <button onClick={() => setIsEditing(!isEditing)} className="ghost-border" style={{ padding: '8px 20px', borderRadius: 12, backgroundColor: 'transparent', color: isLight ? '#111C2D' : '#dee5ff', fontWeight: 600, fontSize: 14, cursor: 'pointer' }}>
-              {isEditing ? 'Cancel' : 'Edit Profile'}
-            </button>
-            {isEditing && <button onClick={handleSave} className="btn-cta" style={{ padding: '8px 20px', fontSize: 14 }}>Save Profile</button>}
+          {/* Progress bar track */}
+          <div style={{
+            width: '100%', height: 8,
+            backgroundColor: isLight ? '#D1D5DB' : 'rgba(255,255,255,0.08)',
+            borderRadius: 6, overflow: 'hidden'
+          }}>
+            <div style={{
+              height: '100%', width: `${progressPercent}%`,
+              background: isLight ? '#111' : '#fff',
+              borderRadius: 6, transition: 'width 600ms ease'
+            }} />
+          </div>
+          <div style={{ marginTop: 5, fontWeight: 800, color: isComplete ? emeraldHighlight : '#f59e0b', fontSize: 13 }}>
+            {progressPercent}%
+          </div>
+          <div style={{ marginTop: 12, display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+            {isEditing ? (
+              <>
+                <button onClick={handleCancel} style={{ padding: '7px 16px', borderRadius: 10, border: `1px solid ${isLight ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.1)'}`, background: 'transparent', color: 'var(--on-surface)', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
+                  Cancel
+                </button>
+                <button onClick={handleSave} className="btn-cta" style={{ padding: '7px 16px', fontSize: 13 }}>
+                  Save
+                </button>
+              </>
+            ) : (
+              <button onClick={() => setIsEditing(true)} style={{
+                padding: '7px 18px', borderRadius: 10,
+                border: `1px solid ${isLight ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.1)'}`,
+                background: 'transparent',
+                color: 'var(--on-surface)',
+                fontWeight: 700, fontSize: 13, cursor: 'pointer'
+              }}>
+                Edit Profile
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      {msg && (
-        <div style={{
-          background: msgType === 'success' ? (isLight ? 'rgba(0,108,73,0.1)' : 'rgba(105,246,184,0.1)') : 'rgba(255,107,107,0.1)',
-          color: msgType === 'success' ? emeraldHighlight : '#ff6b6b',
-          padding: 16, borderRadius: 12, marginBottom: 24, fontWeight: 700
-        }}>{msg}</div>
-      )}
-
-      {/* Bento Grid */}
+      {/* ── Bento Grid ── */}
       <div className="bento-grid">
 
-        {/* Basic Info / AI Summary */}
-        <div className="glass-card col-span-12 lg:col-span-8 flex" style={{ flexDirection: 'column', minHeight: 320 }}>
+        {/* About / Edit */}
+        <div className="glass-card col-span-12 lg:col-span-8" style={{ minHeight: 280 }}>
           {isEditing ? (
             <div>
-              <h2 className="text-accent" style={{ fontSize: 20, marginBottom: 16 }}>Edit Profile Details</h2>
-              <div className="two-col" style={{ gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              <h2 className="text-accent" style={{ fontSize: 18, marginBottom: 18 }}>Edit Profile Details</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                 <div>
-                  <label className="text-muted" style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase' }}>Full Name</label>
+                  <label className="text-muted" style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Full Name</label>
                   <input className="well-input mt-2" placeholder="Your full name" value={form.fullname} onChange={e => setForm({ ...form, fullname: e.target.value })} />
                 </div>
                 <div>
-                  <label className="text-muted" style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase' }}>Phone</label>
-                  <input className="well-input mt-2" placeholder="Phone number" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} />
+                  <label className="text-muted" style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Phone</label>
+                  <input
+                    className="well-input mt-2"
+                    type="tel"
+                    inputMode="tel"
+                    pattern="[0-9+\-\s]{7,15}"
+                    placeholder="+91 9876543210"
+                    value={form.phone}
+                    onChange={e => setForm({ ...form, phone: e.target.value })}
+                  />
                 </div>
                 <div style={{ gridColumn: 'span 2' }}>
-                  <label className="text-muted" style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase' }}>Education</label>
+                  <label className="text-muted" style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Education</label>
                   <input className="well-input mt-2" placeholder="e.g. B.Tech Computer Science, 2024" value={form.education} onChange={e => setForm({ ...form, education: e.target.value })} />
                 </div>
               </div>
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between" style={{ marginBottom: 20 }}>
-                <h2 className="text-accent flex items-center gap-2" style={{ fontSize: 20 }}>About Me</h2>
-              </div>
+              <h2 className="text-accent" style={{ fontSize: 18, marginBottom: 18 }}>About Me</h2>
               {form.fullname || form.education || form.experience ? (
-                <div style={{ fontSize: 15, lineHeight: 1.7, color: isLight ? '#111C2D' : '#c7c5d7' }}>
+                <div style={{ fontSize: 14, lineHeight: 1.8, color: isLight ? '#111C2D' : '#c7c5d7' }}>
                   {form.fullname && <p><strong>Name:</strong> {form.fullname}</p>}
                   {form.education && <p><strong>Education:</strong> {form.education}</p>}
                   {form.phone && <p><strong>Phone:</strong> {form.phone}</p>}
                   {careerPath && <p><strong>Career Path:</strong> {careerPath.name}</p>}
                 </div>
               ) : (
-                <div className="text-muted" style={{ fontStyle: 'italic' }}>
+                <div className="text-muted" style={{ fontStyle: 'italic', fontSize: 14 }}>
                   No profile info added yet. Click "Edit Profile" to fill in your details.
                 </div>
               )}
 
               {form.fullname && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, borderTop: `1px solid ${isLight ? 'rgba(17,28,45,0.1)' : 'rgba(70,69,84,0.3)'}`, paddingTop: 20, marginTop: 'auto' }}>
+                <div style={{ display: 'flex', gap: 32, borderTop: `1px solid ${isLight ? 'rgba(17,28,45,0.08)' : 'rgba(70,69,84,0.25)'}`, paddingTop: 18, marginTop: 20 }}>
                   <div>
-                    <p className="text-muted" style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Profile</p>
-                    <div style={{ fontSize: 24, fontWeight: 800, color: isComplete ? emeraldHighlight : '#f59e0b' }}>{progressPercent}%</div>
+                    <p className="text-muted" style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Profile</p>
+                    <div style={{ fontSize: 22, fontWeight: 800, color: isComplete ? emeraldHighlight : '#f59e0b' }}>{progressPercent}%</div>
                   </div>
                   <div>
-                    <p className="text-muted" style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Skills Listed</p>
-                    <div className="text-accent" style={{ fontSize: 24, fontWeight: 800 }}>{form.skills ? form.skills.split(',').filter(Boolean).length : 0}</div>
+                    <p className="text-muted" style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Skills</p>
+                    <div className="text-accent" style={{ fontSize: 22, fontWeight: 800 }}>{form.skills ? form.skills.split(',').filter(Boolean).length : 0}</div>
                   </div>
                   <div>
-                    <p className="text-muted" style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Status</p>
-                    <div style={{ fontSize: 18, fontWeight: 800, color: isLight ? '#111C2D' : '#dee5ff' }}>{isComplete ? 'Complete' : 'Incomplete'}</div>
+                    <p className="text-muted" style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Status</p>
+                    <div style={{ fontSize: 16, fontWeight: 800, color: isLight ? '#111C2D' : '#dee5ff' }}>{isComplete ? 'Complete' : 'Incomplete'}</div>
                   </div>
                 </div>
               )}
@@ -263,110 +321,78 @@ export default function ProfilePage() {
           )}
         </div>
 
-        {/* Skills / Verified Stack */}
+        {/* Skills */}
         <div className="glass-card col-span-12 lg:col-span-4">
-          <h2 className="text-accent" style={{ fontSize: 20, marginBottom: 20 }}>Skills</h2>
+          <h2 className="text-accent" style={{ fontSize: 18, marginBottom: 18 }}>Skills</h2>
           {isEditing ? (
             <div>
-              <label className="text-muted" style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase' }}>Skills (comma separated)</label>
-              <textarea className="well-input mt-2" style={{ minHeight: 150, borderRadius: 12 }} placeholder="e.g. JavaScript, React, Node.js" value={form.skills} onChange={e => setForm({ ...form, skills: e.target.value })} />
+              <label className="text-muted" style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Skills (comma separated)</label>
+              <textarea className="well-input mt-2" style={{ minHeight: 140, borderRadius: 10 }} placeholder="e.g. JavaScript, React, Node.js" value={form.skills} onChange={e => setForm({ ...form, skills: e.target.value })} />
             </div>
           ) : (
             <>
               {form.skills ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  {/* Show actual career path skill weights if available, else just list user skills */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                   {careerSkills.length > 0
                     ? careerSkills.slice(0, 5).map((skill, i) => (
                       <div key={i}>
-                        <div className="flex justify-between" style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>
+                        <div className="flex justify-between" style={{ fontSize: 12, fontWeight: 600, marginBottom: 5 }}>
                           <span style={{ color: isLight ? '#111C2D' : '#dee5ff' }}>{skill.skillName}</span>
                           <span className="text-accent">{skill.weight}%</span>
                         </div>
-                        <div style={{ height: 6, width: '100%', backgroundColor: isLight ? '#EBF0FA' : '#222a3d', borderRadius: 4, overflow: 'hidden' }}>
+                        <div style={{ height: 5, width: '100%', backgroundColor: isLight ? '#EBF0FA' : '#222a3d', borderRadius: 4, overflow: 'hidden' }}>
                           <div style={{ height: '100%', width: `${Math.min(100, skill.weight)}%`, backgroundColor: strokeColor, borderRadius: 4 }} />
                         </div>
                       </div>
                     ))
                     : form.skills.split(',').filter(Boolean).slice(0, 5).map((skill, i) => (
                       <div key={i}>
-                        <div className="flex justify-between" style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>
-                          <span style={{ color: isLight ? '#111C2D' : '#dee5ff' }}>{skill.trim()}</span>
-                        </div>
-                        <div style={{ height: 6, width: '100%', backgroundColor: isLight ? '#EBF0FA' : '#222a3d', borderRadius: 4, overflow: 'hidden' }}>
-                          <div style={{ height: '100%', width: '60%', backgroundColor: strokeColor, borderRadius: 4 }} />
-                        </div>
+                        <span style={{ color: isLight ? '#111C2D' : '#dee5ff', fontSize: 13, fontWeight: 600 }}>{skill.trim()}</span>
                       </div>
                     ))
                   }
-                  <div style={{ marginTop: 12, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                     {form.skills.split(',').filter(Boolean).map((skill, i) => (
-                      <span key={i} style={{ padding: '4px 10px', backgroundColor: surfaceHigh, fontSize: 12, borderRadius: 6, color: isLight ? '#111C2D' : '#dee5ff', fontWeight: 500 }}>
+                      <span key={i} style={{ padding: '3px 9px', backgroundColor: surfaceHigh, fontSize: 11, borderRadius: 6, color: isLight ? '#111C2D' : '#dee5ff', fontWeight: 500 }}>
                         {skill.trim()}
                       </span>
                     ))}
                   </div>
                 </div>
               ) : (
-                <span className="text-muted">No skills added yet. Edit profile to add your skills.</span>
+                <span className="text-muted" style={{ fontSize: 13 }}>No skills added yet. Edit profile to add your skills.</span>
               )}
             </>
           )}
         </div>
 
-        {/* Experience */}
-        <div className="glass-card col-span-12 lg:col-span-12">
-          <h2 className="text-accent" style={{ fontSize: 20, marginBottom: 20 }}>Work Experience</h2>
+        {/* Work Experience */}
+        <div className="glass-card col-span-12">
+          <h2 className="text-accent" style={{ fontSize: 18, marginBottom: 18 }}>Work Experience</h2>
           {isEditing ? (
             <div>
-              <label className="text-muted" style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase' }}>Work Experience</label>
-              <textarea className="well-input mt-2" style={{ minHeight: 150, borderRadius: 12 }} placeholder="Describe your work experience..." value={form.experience} onChange={e => setForm({ ...form, experience: e.target.value })} />
+              <label className="text-muted" style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Work Experience</label>
+              <textarea className="well-input mt-2" style={{ minHeight: 140, borderRadius: 10 }} placeholder="Describe your work experience (one per line)..." value={form.experience} onChange={e => setForm({ ...form, experience: e.target.value })} />
             </div>
           ) : (
             form.experience ? (
-              <div style={{ position: 'relative', paddingLeft: 32, display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <div style={{ position: 'absolute', left: 11, top: 8, bottom: 8, width: 2, backgroundColor: isLight ? 'rgba(17,28,45,0.1)' : 'rgba(70,69,84,0.3)' }} />
+              <div style={{ position: 'relative', paddingLeft: 28 }}>
+                <div style={{ position: 'absolute', left: 9, top: 8, bottom: 8, width: 2, backgroundColor: isLight ? 'rgba(17,28,45,0.08)' : 'rgba(70,69,84,0.25)' }} />
                 {form.experience.split('\n').filter(Boolean).map((expLine, i) => (
-                  <div key={i} style={{ position: 'relative' }}>
-                    <div style={{ position: 'absolute', left: -32, top: 4, width: 24, height: 24, borderRadius: '50%', backgroundColor: isLight ? '#FFFFFF' : '#171f32', border: `2px solid ${i === 0 ? strokeColor : (isLight ? '#4B5563' : '#464554')}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <div style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: i === 0 ? strokeColor : (isLight ? '#4B5563' : '#464554') }} />
+                  <div key={i} style={{ position: 'relative', marginBottom: 18 }}>
+                    <div style={{ position: 'absolute', left: -28, top: 4, width: 20, height: 20, borderRadius: '50%', backgroundColor: isLight ? '#fff' : '#171f32', border: `2px solid ${i === 0 ? strokeColor : (isLight ? '#4B5563' : '#464554')}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: 5, height: 5, borderRadius: '50%', backgroundColor: i === 0 ? strokeColor : (isLight ? '#4B5563' : '#464554') }} />
                     </div>
                     <p className="text-muted" style={{ fontSize: 14, lineHeight: 1.6 }}>{expLine}</p>
                   </div>
                 ))}
               </div>
             ) : (
-              <span className="text-muted">No experience added yet. Edit profile to add your work history.</span>
+              <span className="text-muted" style={{ fontSize: 13 }}>No experience added yet. Edit profile to add your work history.</span>
             )
           )}
         </div>
       </div>
-
-      {/* Bottom completion alert */}
-      {!isComplete && (
-        <div style={{
-          marginTop: 24,
-          padding: '14px 20px',
-          borderRadius: 12,
-          background: isLight ? 'rgba(217,119,6,0.1)' : 'rgba(245,158,11,0.1)',
-          border: `1px solid ${isLight ? 'rgba(217,119,6,0.3)' : 'rgba(245,158,11,0.3)'}`,
-          color: isLight ? '#92400E' : '#fbbf24',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: 16
-        }}>
-          <div>
-            <strong>⚠ Complete your profile ({progressPercent}% done)</strong>
-            <div style={{ fontSize: 13, marginTop: 4, opacity: 0.85 }}>
-              Missing: {Object.entries(completionFields).filter(([, v]) => !v).map(([k]) => k).join(', ')}. A complete profile improves recommendations and visibility to employers.
-            </div>
-          </div>
-          <button onClick={() => setIsEditing(true)} className="btn-cta" style={{ fontSize: 13, padding: '8px 16px', whiteSpace: 'nowrap' }}>
-            Complete Now
-          </button>
-        </div>
-      )}
     </div>
   );
 }
