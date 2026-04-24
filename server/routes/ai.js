@@ -2,6 +2,8 @@ const express = require('express');
 const { callGroq, extractJSON } = require('../utils/groq');
 const careerSkills = require('../data/careerSkills');
 const Skill = require('../models/Skill');
+const UserScore = require('../models/UserScore');
+const InterviewResult = require('../models/InterviewResult');
 const auth = require('../middleware/auth');
 const router = express.Router();
 
@@ -64,14 +66,27 @@ router.post('/recommendations', auth, async (req, res) => {
   try {
     const { careerName, score, total, skillList } = req.body;
 
+    // Fetch granular historical data to feed the AI
+    const recentScore = await UserScore.findOne({ user: req.user._id }).sort({ createdAt: -1 });
+    const weakTopics = recentScore ? recentScore.weakTopics : '';
+
+    const recentInterviews = await InterviewResult.find({ user: req.user._id, cheatingFlag: null }).sort({ createdAt: -1 }).limit(5);
+    const interviewFeedback = recentInterviews.length 
+      ? recentInterviews.map(r => `Q: ${r.question} | Feedback: ${r.aiFeedback}`).join('\n')
+      : 'No recent mock interviews available.';
+
     const prompt = `
+You are an expert AI Career Coach performing a comprehensive Skill Gap Analysis.
+Analyze the user's specific test and interview performance to generate a highly personalized, actionable roadmap.
+Do not use generic advice. Use concrete examples from their weak topics and interview feedback (e.g., "You struggled with React hooks", "Focus on SQL joins").
+
 You MUST return ONLY valid JSON — no markdown, no commentary, no extra text.
 Return JSON exactly in this format:
 
 {
-  "summary": "text",
-  "weak_skills": {"Skill Name": number, ...},
-  "learning_priority": {"Skill Name": number, ...},
+  "summary": "text (mention specific weak topics or interview feedback)",
+  "weak_skills": {"Specific Skill Name": number (0-100), ...},
+  "learning_priority": {"Specific Skill Name": number (0-100), ...},
   "improvement_points": ["point1", "point2"],
   "roadmap": ["Week 1: ...","Week 2: ...","Week 3: ...","Week 4: ..."],
   "projects": ["project1","project2"]
@@ -79,8 +94,11 @@ Return JSON exactly in this format:
 
 User data:
 Career: ${careerName}
-Score: ${score} / ${total}
-Skills: ${(skillList || []).join(', ')}
+Aptitude Score: ${score} / ${total}
+Required Skills: ${(skillList || []).join(', ')}
+Failed Test Topics: ${weakTopics || 'None available'}
+Recent Interview Feedback:
+${interviewFeedback}
 `;
 
     const content = await callGroq([

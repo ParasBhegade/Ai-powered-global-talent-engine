@@ -8,10 +8,37 @@ const router = express.Router();
 // POST /api/interviews/submit — batch evaluate + save
 router.post('/submit', auth, async (req, res) => {
   try {
-    const { role, difficulty, questions, answers } = req.body;
+    const { role, difficulty, questions, answers, cheatingReason } = req.body;
 
     if (!role || !difficulty || !Array.isArray(questions) || !Array.isArray(answers) || questions.length !== answers.length) {
       return res.status(400).json({ error: 'Invalid payload' });
+    }
+
+    // Generate session ID
+    const sessionId = `sess_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+
+    // If cheating was flagged, bypass AI and save 0 score
+    if (cheatingReason) {
+      for (let i = 0; i < questions.length; i++) {
+        await InterviewResult.create({
+          sessionId,
+          user: req.user._id,
+          jobRole: role,
+          difficulty,
+          question: questions[i],
+          userAnswer: answers[i] || '',
+          aiFeedback: `Submitted due to cheating: ${cheatingReason}`,
+          aiScore: 0,
+          cheatingFlag: cheatingReason
+        });
+      }
+      return res.json({
+        session_id: sessionId,
+        overall_score: 0,
+        suggestions: ['Interview terminated automatically due to cheating detection.'],
+        progress_level: 'Failed',
+        results: questions.map((q, i) => ({ question: q, answer: answers[i] || '', evaluation: 'Cheating detected', score: 0 }))
+      });
     }
 
     const skills = careerSkills[role] || '';
@@ -53,9 +80,6 @@ Questions and Answers:
     if (!result) {
       return res.status(500).json({ error: 'JSON parse error', raw: content });
     }
-
-    // Generate session ID
-    const sessionId = `sess_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
 
     // Save to DB
     if (result.results) {

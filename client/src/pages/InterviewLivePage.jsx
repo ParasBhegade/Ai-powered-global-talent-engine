@@ -2,6 +2,9 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { apiFetch } from '../utils/api';
 import { useTheme } from '../context/ThemeContext';
+import * as tf from '@tensorflow/tfjs';
+import * as blazeface from '@tensorflow-models/blazeface';
+import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
 export default function InterviewLivePage() {
   const [params] = useSearchParams();
@@ -15,12 +18,24 @@ export default function InterviewLivePage() {
   const streamRef = useRef(null);   // <-- holds the MediaStream for cleanup
   const recognizerRef = useRef(null);
   const faceCheckRef = useRef(null);
+  
+  const audioContextRef = useRef(null);
+  const analyserRef = useRef(null);
+  const audioIntervalRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const recordedChunksRef = useRef([]);
 
   const [cameraReady, setCameraReady] = useState(false);
   const [faceVisible, setFaceVisible] = useState(false);
   const [obstructed, setObstructed] = useState(false);
   const [lookingAway, setLookingAway] = useState(false);
+  const [multipleFaces, setMultipleFaces] = useState(false);
+  const [deviceDetected, setDeviceDetected] = useState(false);
   const [cameraStatus, setCameraStatus] = useState('Initializing camera…');
+
+  const [tabSwitchCount, setTabSwitchCount] = useState(0);
+  const [audioCheatWarning, setAudioCheatWarning] = useState(false);
+  const [cheatingFlag, setCheatingFlag] = useState(null);
 
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
@@ -28,14 +43,42 @@ export default function InterviewLivePage() {
   const [answerText, setAnswerText] = useState('Press Start to speak…');
   const [isRecording, setIsRecording] = useState(false);
   const [questionsLoaded, setQuestionsLoaded] = useState(false);
+  const [faceModel, setFaceModel] = useState(null);
+  const [objModel, setObjModel] = useState(null);
+
+  // ─── Load Face & Object Detection Models ──────────────────────────────────────────────────
+  useEffect(() => {
+    const loadModels = async () => {
+      try {
+        await tf.ready();
+        const [loadedFaceModel, loadedObjModel] = await Promise.all([
+          blazeface.load(),
+          cocoSsd.load()
+        ]);
+        setFaceModel(loadedFaceModel);
+        setObjModel(loadedObjModel);
+      } catch (err) {
+        console.error("Failed to load models", err);
+      }
+    };
+    loadModels();
+  }, []);
 
   const isLight = theme === 'light';
 
   // ─── Full session cleanup ─────────────────────────────────────────────────────
   const cleanupSession = useCallback(() => {
-    // Stop all camera/mic tracks
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+    }
+    if (audioIntervalRef.current) clearInterval(audioIntervalRef.current);
+    if (audioContextRef.current) {
+      try { audioContextRef.current.close(); } catch {}
+    }
+    // Stop all camera/mic tracks with a slight delay so MediaRecorder can finalize
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(t => t.stop());
+      const tracks = streamRef.current.getTracks();
+      setTimeout(() => tracks.forEach(t => t.stop()), 500);
       streamRef.current = null;
     }
     // Stop speech recognition
@@ -94,6 +137,41 @@ export default function InterviewLivePage() {
         streamRef.current = stream;
         if (videoRef.current) videoRef.current.srcObject = stream;
         setCameraReady(true);
+
+        // --- Start Audio Analyser (Anti-cheating) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        audioContextRef.current = audioCtx;
+        const source = audioCtx.createMediaStreamSource(stream);
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        source.connect(analyser);
+        analyserRef.current = analyser;
+
+        // --- Initialize Media Recorder (Auto-save) ---
+        const mime = MediaRecorder.isTypeSupported('video/webm; codecs=vp8,opus') ? 'video/webm; codecs=vp8,opus' : 'video/webm';
+        const recorder = new MediaRecorder(stream, { mimeType: mime });
+        mediaRecorderRef.current = recorder;
+        recorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) {
+            recordedChunksRef.current.push(e.data);
+          }
+        };
+        recorder.onstop = () => {
+          const blob = new Blob(recordedChunksRef.current, { type: mime });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = `interview_recording_${Date.now()}.webm`;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          }, 100);
+        };
+        // We will start the recorder when the user clicks "Start Speaking"
+        
       } catch {
         setCameraReady(false);
         setCameraStatus('Camera OFF — allow camera to continue.');
@@ -103,56 +181,131 @@ export default function InterviewLivePage() {
     initCamera();
   }, []);
 
-  // ─── Face detection (pixel brightness) ──────────────────────────────────────
+  // ─── Face & Object detection (TensorFlow) ──────────────────────────────────────
   useEffect(() => {
-    if (!cameraReady) return;
+    if (!cameraReady || !faceModel || !objModel) return;
 
-    const analyzeFrame = () => {
+    const analyzeFrame = async () => {
       const video = videoRef.current;
       if (!video || video.videoWidth === 0) return;
-      const cvs = document.createElement('canvas');
-      cvs.width = video.videoWidth;
-      cvs.height = video.videoHeight;
-      const ctx = cvs.getContext('2d');
-      ctx.drawImage(video, 0, 0, cvs.width, cvs.height);
-      const data = ctx.getImageData(0, 0, cvs.width, cvs.height).data;
-      let bright = 0;
-      const totalPixels = data.length / 4;
-      for (let i = 0; i < data.length; i += 4) {
-        if (data[i] > 60 && data[i + 1] > 60 && data[i + 2] > 60) bright++;
-      }
-      const newObstructed = bright < totalPixels * 0.02;
-      const newFaceVisible = bright > totalPixels * 0.08;
-      let left = 0, right = 0;
-      const y1 = Math.floor(cvs.height * 0.28), y2 = Math.floor(cvs.height * 0.72);
-      for (let y = y1; y < y2; y++) {
-        for (let x = 0; x < cvs.width; x++) {
-          const idx = (y * cvs.width + x) * 4;
-          const sum = data[idx] + data[idx + 1] + data[idx + 2];
-          if (x < cvs.width / 2) left += sum; else right += sum;
+      
+      try {
+        const [facePredictions, objPredictions] = await Promise.all([
+          faceModel.estimateFaces(video, false),
+          objModel.detect(video)
+        ]);
+        
+        const restrictedItems = ['cell phone', 'remote', 'book'];
+        const hasDevice = objPredictions.some(p => restrictedItems.includes(p.class));
+        setDeviceDetected(hasDevice);
+
+        if (facePredictions.length === 0) {
+          setFaceVisible(false);
+          setObstructed(true); // Treat no face as obstructed/away
+          setLookingAway(false);
+          setMultipleFaces(false);
+        } else if (facePredictions.length > 1) {
+          setFaceVisible(false);
+          setObstructed(false);
+          setLookingAway(false);
+          setMultipleFaces(true);
+        } else {
+          // Exactly 1 face
+          setFaceVisible(true);
+          setObstructed(false);
+          setMultipleFaces(false);
+          
+          const landmarks = facePredictions[0].landmarks;
+          if (landmarks) {
+            const rightEye = landmarks[0];
+            const leftEye = landmarks[1];
+            const nose = landmarks[2];
+            
+            const eyeDist = Math.abs(leftEye[0] - rightEye[0]);
+            const distRight = Math.abs(nose[0] - rightEye[0]);
+            const distLeft = Math.abs(leftEye[0] - nose[0]);
+            
+            if (eyeDist > 0 && Math.min(distRight, distLeft) / eyeDist < 0.2) {
+              setLookingAway(true);
+            } else {
+              setLookingAway(false);
+            }
+          } else {
+            setLookingAway(false);
+          }
         }
+      } catch (e) {
+        // Ignored
       }
-      const lrSum = left + right;
-      const newLookingAway = lrSum > 0 && Math.abs(left - right) > lrSum * 0.28;
-      setObstructed(newObstructed);
-      setFaceVisible(newFaceVisible);
-      setLookingAway(newLookingAway);
     };
-    faceCheckRef.current = setInterval(analyzeFrame, 600);
+    faceCheckRef.current = setInterval(analyzeFrame, 400);
     return () => clearInterval(faceCheckRef.current);
-  }, [cameraReady]);
+  }, [cameraReady, faceModel, objModel]);
 
   // ─── Camera status message ───────────────────────────────────────────────────
   const getCameraStatus = () => {
     if (!cameraReady) return { msg: 'Camera OFF — allow camera to continue.', ok: false };
-    if (obstructed) return { msg: 'Camera obstructed — clear the lens.', ok: false };
+    if (deviceDetected) return { msg: 'Unauthorized device detected! Please put away your phone.', ok: false };
+    if (obstructed) return { msg: 'Face not detected or camera obstructed.', ok: false };
+    if (multipleFaces) return { msg: 'Multiple faces detected. Please be alone.', ok: false };
     if (!faceVisible) return { msg: 'Face not detected — sit in front of camera.', ok: false };
     if (lookingAway) return { msg: 'Keep your eyes on the screen.', ok: false };
     return { msg: 'Camera OK — You may start.', ok: true };
   };
 
   const camStatus = getCameraStatus();
-  useEffect(() => { setCameraStatus(camStatus.msg); }, [cameraReady, obstructed, faceVisible, lookingAway]);
+  useEffect(() => { setCameraStatus(camStatus.msg); }, [cameraReady, obstructed, faceVisible, lookingAway, multipleFaces, deviceDetected]);
+
+  // ─── Tab Switch & Audio Detection (Anti-Cheating) ────────────────────────────
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && cameraReady) {
+        setTabSwitchCount(prev => {
+          const newCount = prev + 1;
+          if (newCount >= 5 && !cheatingFlag) {
+            setCheatingFlag("Excessive Tab Switching");
+            alert("Interview terminated automatically due to: Excessive Tab Switching (5 times).");
+          } else if (newCount < 5) {
+            alert(`Warning: Tab switch detected! (${newCount}/5). If you switch tabs 5 times, your interview will be terminated.`);
+          }
+          return newCount;
+        });
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [cameraReady, cheatingFlag]);
+
+  // If cheatingFlag was set by Tab Switch, auto submit immediately
+  useEffect(() => {
+    if (cheatingFlag && isRecording) {
+      stopRecording();
+      submitAll(cheatingFlag);
+    } else if (cheatingFlag && !isRecording && current === 0 && !questionsLoaded) {
+      // Cheating before even starting, just exit
+      cleanupSession();
+      navigate('/dashboard', { replace: true });
+    } else if (cheatingFlag && !isRecording) {
+      submitAll(cheatingFlag);
+    }
+  }, [cheatingFlag]);
+
+  useEffect(() => {
+    if (!cameraReady || !analyserRef.current) return;
+    const checkAudio = () => {
+      if (isRecording) return; // User is answering, ignore volume
+      const analyser = analyserRef.current;
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(dataArray);
+      let sum = 0;
+      for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+      const avg = sum / dataArray.length;
+      if (avg > 35) setAudioCheatWarning(true);
+      else setAudioCheatWarning(false);
+    };
+    audioIntervalRef.current = setInterval(checkAudio, 1000);
+    return () => clearInterval(audioIntervalRef.current);
+  }, [cameraReady, isRecording]);
 
   // ─── Load questions ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -171,12 +324,16 @@ export default function InterviewLivePage() {
     loadQ();
   }, [camStatus.ok, questionsLoaded]);
 
-  // ─── Fullscreen ──────────────────────────────────────────────────────────────
+  // ─── Fullscreen Enforcement ──────────────────────────────────────────────────────────────
   useEffect(() => {
-    if (camStatus.ok && questionsLoaded && !document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => { });
-    }
-  }, [camStatus.ok, questionsLoaded]);
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement && isRecording) {
+        alert("Warning: Fullscreen was exited! Please stay in fullscreen during the interview.");
+      }
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, [isRecording]);
 
   // ─── TTS (natural voice) ─────────────────────────────────────────────────────
   const speak = (text) => {
@@ -199,7 +356,21 @@ export default function InterviewLivePage() {
 
   // ─── Speech recognition ──────────────────────────────────────────────────────
   const startRecording = () => {
-    if (!camStatus.ok) { alert('Your face must be visible before starting.'); return; }
+    if (!camStatus.ok) { alert('Your camera status must be OK before starting.'); return; }
+    
+    // Request fullscreen on explicit user gesture
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.warn("Fullscreen request failed:", err);
+      });
+    }
+
+    // Start video recording if not already started
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'inactive') {
+      recordedChunksRef.current = []; // Clear any old chunks just in case
+      mediaRecorderRef.current.start(); // Start without timeslicing for a stable single-blob file
+    }
+
     const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRec) { alert('Speech recognition not supported. Use Chrome.'); return; }
     speechSynthesis.cancel();
@@ -235,15 +406,19 @@ export default function InterviewLivePage() {
     if (questions[next]) setTimeout(() => speak(questions[next]), 400);
   };
 
-  const submitAll = async () => {
+  const submitAll = async (forceCheatingReason = null) => {
     stopRecording();
     cleanupSession();
     const finalAnswers = [...answers];
     finalAnswers[current] = answerText;
+    
+    // Resolve if reason was passed directly or from state
+    const reason = typeof forceCheatingReason === 'string' ? forceCheatingReason : cheatingFlag;
+
     try {
       const data = await apiFetch('/interviews/submit', {
         method: 'POST',
-        body: JSON.stringify({ role, difficulty, questions, answers: finalAnswers })
+        body: JSON.stringify({ role, difficulty, questions, answers: finalAnswers, cheatingReason: reason })
       });
       if (data.session_id) navigate(`/interview-result/${data.session_id}`, { replace: true });
     } catch (err) { alert('Submit failed: ' + err.message); }
@@ -282,6 +457,11 @@ export default function InterviewLivePage() {
           {!camStatus.ok && (
             <div style={{ marginTop: 8, padding: '10px 14px', borderRadius: 10, background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', fontSize: 13, color: '#f59e0b' }}>
               Your face must be clearly visible to start the interview. Position yourself in front of the camera.
+            </div>
+          )}
+          {audioCheatWarning && (
+            <div style={{ marginTop: 8, padding: '10px 14px', borderRadius: 10, background: 'rgba(255,107,107,0.1)', border: '1px solid rgba(255,107,107,0.3)', fontSize: 13, color: '#ff6b6b', fontWeight: 'bold' }}>
+              ⚠️ Background audio detected! Ensure you are alone and no one is helping you.
             </div>
           )}
           <p className="text-sm text-muted" style={{ marginTop: 8 }}>Camera must be ON and face visible throughout.</p>
