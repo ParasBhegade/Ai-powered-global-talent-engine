@@ -17,10 +17,8 @@ async function seed() {
     connectTimeoutMS: 30000
   });
   console.log('Connected to MongoDB');
-  // Clear existing data
+  // Clear ONLY non-user collections (preserve real user registrations)
   try {
-    console.log('Clearing Users...');
-    await User.deleteMany({});
     console.log('Clearing CareerPaths...');
     await CareerPath.deleteMany({});
     console.log('Clearing Skills...');
@@ -29,22 +27,33 @@ async function seed() {
     await AptitudeQuestion.deleteMany({});
     console.log('Clearing Tutorials...');
     await Tutorial.deleteMany({});
-    console.log('Successfully cleared all collections.');
+    console.log('Successfully cleared career/skill/question/tutorial collections.');
+    console.log('⚠️  Users collection is NOT cleared — existing accounts are preserved.');
   } catch (err) {
     console.error('Error clearing data:', err);
     throw err;
   }
 
-  // ========== Admin User ==========
+  // ========== Admin User (upsert — safe to re-run) ==========
   try {
-    console.log('Creating Admin User...');
-    const admin = await User.create({
-      name: 'Admin',
-      email: 'admin@aitalent.com',
-      password: 'admin123',
-      role: 'admin'
-    });
-    console.log('✅ Admin user created:', admin.email);
+    console.log('Ensuring Admin User exists...');
+    const existingAdmin = await User.findOne({ email: 'admin@aitalent.com' });
+    if (!existingAdmin) {
+      const admin = await User.create({
+        name: 'Admin',
+        email: 'admin@aitalent.com',
+        password: 'admin123',
+        role: 'admin'
+      });
+      console.log('✅ Admin user created:', admin.email);
+    } else {
+      // Ensure role is admin in case it was changed
+      if (existingAdmin.role !== 'admin') {
+        existingAdmin.role = 'admin';
+        await existingAdmin.save();
+      }
+      console.log('✅ Admin user already exists:', existingAdmin.email);
+    }
   } catch (err) {
     console.error('Error creating Admin user:', JSON.stringify(err, null, 2) || err.message);
     throw err;
