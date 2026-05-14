@@ -8,7 +8,8 @@ const interviewResultSchema = new mongoose.Schema({
   question: { type: String, required: true },
   userAnswer: { type: String, default: '' },
   aiFeedback: { type: String, default: '' },
-  aiScore: { type: Number, default: 0 }
+  aiScore: { type: Number, default: 0 },
+  cheatingFlag: { type: String, default: null }
 }, { timestamps: true });
 
 module.exports = mongoose.model('InterviewResult', interviewResultSchema);
