@@ -6,8 +6,9 @@ $db   = "ai_talent_db";
 $port = 3307;           // your confirmed MySQL port
 
 $conn = new mysqli($host, $user, $pass, $db, $port);
-$GROQ_API_KEY = "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";
-
+// DEPRECATED: Groq API Key should be stored in .env file, NOT in source code!
+// Load from environment variable instead:
+$GROQ_API_KEY = getenv('GROQ_API_KEY') ?: '';
 
 
 // Connection test

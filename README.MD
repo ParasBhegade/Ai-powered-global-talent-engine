@@ -20,10 +20,13 @@ Full-stack MERN application for AI-powered career guidance, mock interviews, and
 6. It looks like: `mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/ai_talent_db?retryWrites=true&w=majority`
 
 ### 2. Configure Environment
-Edit `server/.env` and paste your connection string:
-```
-MONGODB_URI=mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/ai_talent_db?retryWrites=true&w=majority
-```
+1. Copy `server/.env.example` to `server/.env`
+2. Edit `server/.env` and fill in:
+   - `MONGODB_URI`: Your MongoDB Atlas connection string (from step 5 above)
+   - `GROQ_API_KEY`: Get from [https://console.groq.com/keys](https://console.groq.com/keys)
+   - `JWT_SECRET`: Keep as-is or set a custom strong secret
+
+**⚠️ IMPORTANT**: Never commit `.env` file to GitHub - it contains secrets!
 
 ### 3. Seed Database
 ```bash

@@ -12,11 +12,11 @@ This guide documents the exact process to get the migrated MERN application up a
 ## 🛠️ Step 1: Environment Configuration
 The backend requires a connection string to your MongoDB Atlas cluster.
 
-1.  Open `server/.env`.
+1.  Copy `.env.example` to `.env` (or create `.env` with the template below).
 2.  Update the `MONGODB_URI` with your Atlas connection string.
     > [!IMPORTANT]
     > Ensure you replace `<password>` with your actual database password and URL-encode special characters (e.g., `@` becomes `%40`).
-    > Your current working URI is: `mongodb+srv://talent_ai:talent%402027@cluster0.4fq1utt.mongodb.net/ai_talent_db?appName=Cluster0`
+    > Example format: `mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/ai_talent_db?appName=Cluster0`
 
 ---
 

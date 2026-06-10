@@ -1,0 +1,34 @@
+# Environment variables - NEVER commit
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist/
+build/
+.next/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# OS
+Thumbs.db
+desktop.ini
+
+# Uploads (keep directory structure but not actual files)
+uploads/profile_photos/*
+!uploads/profile_photos/.gitkeep
