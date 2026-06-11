@@ -17,7 +17,15 @@ export default function ProfilePage() {
   const [careerPath, setCareerPath] = useState(null);
   const [careerSkills, setCareerSkills] = useState([]);
   const fileRef = useRef();
+  const resumeRef = useRef();
   const [loaded, setLoaded] = useState(false);
+
+  // Resume Analyzer states
+  const [resumeAnalyzing, setResumeAnalyzing] = useState(false);
+  const [resumeExtracted, setResumeExtracted] = useState(null);
+  const [resumeSelected, setResumeSelected] = useState({ fullname: true, phone: true, education: true, experience: true, skills: true });
+  const [resumeError, setResumeError] = useState('');
+  const [resumeApplied, setResumeApplied] = useState(false);
 
   useEffect(() => { fetchProfile(); }, []);
 
@@ -102,6 +110,68 @@ export default function ProfilePage() {
     if (f.size > 2 * 1024 * 1024) { alert('Max 2MB allowed'); return; }
     setPhoto(f);
     setPreview(URL.createObjectURL(f));
+  };
+
+  // Resume upload handler
+  const handleResumeUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    // Reset file input so same file can be re-uploaded
+    e.target.value = '';
+
+    const allowed = [
+      'application/pdf',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+    if (!allowed.includes(file.type)) {
+      setResumeError('Only PDF and DOCX files are supported.');
+      setTimeout(() => setResumeError(''), 4000);
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setResumeError('File too large. Maximum size is 5MB.');
+      setTimeout(() => setResumeError(''), 4000);
+      return;
+    }
+
+    setResumeAnalyzing(true);
+    setResumeError('');
+    setResumeApplied(false);
+
+    try {
+      const fd = new FormData();
+      fd.append('resume', file);
+      const res = await apiFetch('/users/analyze-resume', { method: 'POST', body: fd });
+      setResumeExtracted(res.extracted);
+      setResumeSelected({ fullname: true, phone: true, education: true, experience: true, skills: true });
+    } catch (err) {
+      setResumeError(err.message || 'Failed to analyze resume.');
+      setTimeout(() => setResumeError(''), 5000);
+    } finally {
+      setResumeAnalyzing(false);
+    }
+  };
+
+  // Apply extracted fields to form
+  const handleApplyResume = () => {
+    const updates = {};
+    Object.keys(resumeSelected).forEach(key => {
+      if (resumeSelected[key] && resumeExtracted[key]) {
+        updates[key] = resumeExtracted[key];
+      }
+    });
+    setForm(prev => ({ ...prev, ...updates }));
+    setResumeExtracted(null);
+    setResumeApplied(true);
+    setTimeout(() => setResumeApplied(false), 4000);
+  };
+
+  const resumeFieldLabels = {
+    fullname: 'Full Name',
+    phone: 'Phone',
+    education: 'Education',
+    experience: 'Work Experience',
+    skills: 'Skills'
   };
 
   const isLight = theme === 'light';
@@ -262,6 +332,44 @@ export default function ProfilePage() {
           {isEditing ? (
             <div>
               <h2 className="text-accent" style={{ fontSize: 18, marginBottom: 18 }}>Edit Profile Details</h2>
+
+              {/* Resume Upload Banner */}
+              <div className="resume-upload-banner" onClick={() => resumeRef.current.click()} role="button" tabIndex={0} id="resume-upload-trigger">
+                <div className="resume-upload-icon">📄</div>
+                <div className="resume-upload-info">
+                  <h4>Quick Fill from Resume</h4>
+                  <p>Upload your PDF or DOCX resume to auto-fill profile fields instantly</p>
+                </div>
+                <span className="resume-upload-badge">AI Powered</span>
+              </div>
+              <input ref={resumeRef} type="file" accept=".pdf,.docx" style={{ display: 'none' }} onChange={handleResumeUpload} />
+
+              {/* Analyzing State */}
+              {resumeAnalyzing && (
+                <div className="resume-analyzing">
+                  <div className="resume-analyzing-spinner" />
+                  <div className="resume-analyzing-text">Analyzing your resume with AI...</div>
+                </div>
+              )}
+
+              {/* Resume Error */}
+              {resumeError && (
+                <div style={{
+                  padding: '10px 16px', borderRadius: 10, marginBottom: 16,
+                  background: 'rgba(255,107,107,0.1)', color: '#ff6b6b',
+                  fontSize: 13, fontWeight: 700
+                }}>
+                  {resumeError}
+                </div>
+              )}
+
+              {/* Resume Applied Success */}
+              {resumeApplied && (
+                <div className="resume-success-flash">
+                  ✓ Resume fields applied to your profile
+                </div>
+              )}
+
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                 <div>
                   <label className="text-muted" style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase' }}>Full Name</label>
@@ -393,6 +501,54 @@ export default function ProfilePage() {
           )}
         </div>
       </div>
+
+      {/* ── Resume Preview Modal ── */}
+      {resumeExtracted && (
+        <div className="resume-preview-overlay" onClick={(e) => { if (e.target === e.currentTarget) setResumeExtracted(null); }}>
+          <div className="resume-preview-modal">
+            <div className="resume-preview-header">
+              <h3>📄 Extracted Profile Data</h3>
+              <button className="resume-close-btn" onClick={() => setResumeExtracted(null)}>✕</button>
+            </div>
+
+            <p className="text-muted" style={{ fontSize: 12, marginBottom: 18, marginTop: -12 }}>
+              Select the fields you want to apply to your profile
+            </p>
+
+            {Object.keys(resumeFieldLabels).map(key => (
+              <div className="resume-field-row" key={key}>
+                <input
+                  type="checkbox"
+                  className="resume-field-checkbox"
+                  checked={resumeSelected[key]}
+                  onChange={() => setResumeSelected(prev => ({ ...prev, [key]: !prev[key] }))}
+                  id={`resume-field-${key}`}
+                />
+                <label className="resume-field-content" htmlFor={`resume-field-${key}`} style={{ cursor: 'pointer' }}>
+                  <div className="resume-field-label">{resumeFieldLabels[key]}</div>
+                  {resumeExtracted[key] ? (
+                    <div className="resume-field-value">{resumeExtracted[key]}</div>
+                  ) : (
+                    <div className="resume-field-empty">Not found in resume</div>
+                  )}
+                </label>
+              </div>
+            ))}
+
+            <div className="resume-preview-actions">
+              <button className="resume-btn-cancel" onClick={() => setResumeExtracted(null)}>Cancel</button>
+              <button
+                className="resume-btn-apply"
+                onClick={handleApplyResume}
+                disabled={!Object.values(resumeSelected).some(Boolean)}
+                id="resume-apply-btn"
+              >
+                Apply Selected Fields
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
