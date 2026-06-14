@@ -101,10 +101,15 @@ Recent Interview Feedback:
 ${interviewFeedback}
 `;
 
-    const content = await callGroq([
-      { role: 'system', content: 'You output ONLY strict JSON, nothing else.' },
-      { role: 'user', content: prompt }
-    ], { temperature: 0.0, maxTokens: 700 });
+    let content = '';
+    try {
+      content = await callGroq([
+        { role: 'system', content: 'You output ONLY strict JSON, nothing else.' },
+        { role: 'user', content: prompt }
+      ], { temperature: 0.0, maxTokens: 700 });
+    } catch (apiError) {
+      console.warn('Groq API Error in recommendations:', apiError.message);
+    }
 
     const parsed = extractJSON(content);
 

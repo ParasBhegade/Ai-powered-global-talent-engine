@@ -91,12 +91,12 @@ export default function StudentDashboard() {
       data: proficiencyValues,
       backgroundColor: hasSkills
         ? skills.map((_, i) =>
-            !latestScore
-              ? 'rgba(128,128,128,0.25)'  // grey when no test
-              : i % 2 === 0
-                ? (isLight ? 'rgba(0,108,73,0.8)' : 'rgba(105,246,184,0.92)')
-                : (isLight ? 'rgba(70,72,212,0.8)' : 'rgba(163,166,255,0.92)')
-          )
+          !latestScore
+            ? 'rgba(128,128,128,0.25)'  // grey when no test
+            : i % 2 === 0
+              ? (isLight ? 'rgba(0,108,73,0.8)' : 'rgba(105,246,184,0.92)')
+              : (isLight ? 'rgba(70,72,212,0.8)' : 'rgba(163,166,255,0.92)')
+        )
         : ['rgba(128,128,128,0.2)'],
       borderRadius: 8,
       barPercentage: 0.6
