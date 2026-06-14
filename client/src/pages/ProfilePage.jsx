@@ -7,7 +7,7 @@ import { useTheme } from '../context/ThemeContext';
 export default function ProfilePage() {
   const { user } = useAuth();
   const { theme } = useTheme();
-  const [form, setForm] = useState({ fullname: '', phone: '', education: '', experience: '', skills: '' });
+  const [form, setForm] = useState({ fullname: '', phone: '', education: '', experience: '', skills: '', resumeRaw: '', resumeParsed: null });
   const [photo, setPhoto] = useState(null);
   const [preview, setPreview] = useState('');
   const [profilePhotoPath, setProfilePhotoPath] = useState('');
@@ -22,8 +22,9 @@ export default function ProfilePage() {
 
   // Resume Analyzer states
   const [resumeAnalyzing, setResumeAnalyzing] = useState(false);
+  const [resumeRawText, setResumeRawText] = useState('');
   const [resumeExtracted, setResumeExtracted] = useState(null);
-  const [resumeSelected, setResumeSelected] = useState({ fullname: true, phone: true, education: true, experience: true, skills: true });
+  const [resumeSelected, setResumeSelected] = useState({ name: true, email: true, phone: true, education: true, experience: true, skills: true, certifications: true });
   const [resumeError, setResumeError] = useState('');
   const [resumeApplied, setResumeApplied] = useState(false);
 
@@ -39,6 +40,8 @@ export default function ProfilePage() {
         education: u.education || '',
         experience: u.experience || '',
         skills: u.skills || '',
+        resumeRaw: u.resumeRaw || '',
+        resumeParsed: u.resumeParsed || null,
       });
       if (u.profilePhoto) {
         setProfilePhotoPath(u.profilePhoto);
@@ -141,9 +144,10 @@ export default function ProfilePage() {
     try {
       const fd = new FormData();
       fd.append('resume', file);
-      const res = await apiFetch('/users/analyze-resume', { method: 'POST', body: fd });
-      setResumeExtracted(res.extracted);
-      setResumeSelected({ fullname: true, phone: true, education: true, experience: true, skills: true });
+      const res = await apiFetch('/users/resume/preview', { method: 'POST', body: fd });
+      setResumeRawText(res.rawText);
+      setResumeExtracted(res.parsedData);
+      setResumeSelected({ name: true, email: true, phone: true, education: true, experience: true, skills: true, certifications: true });
     } catch (err) {
       setResumeError(err.message || 'Failed to analyze resume.');
       setTimeout(() => setResumeError(''), 5000);
@@ -154,12 +158,16 @@ export default function ProfilePage() {
 
   // Apply extracted fields to form
   const handleApplyResume = () => {
-    const updates = {};
-    Object.keys(resumeSelected).forEach(key => {
-      if (resumeSelected[key] && resumeExtracted[key]) {
-        updates[key] = resumeExtracted[key];
-      }
-    });
+    const updates = {
+      resumeRaw: resumeRawText,
+      resumeParsed: resumeExtracted
+    };
+    if (resumeSelected.name && resumeExtracted.name) updates.fullname = resumeExtracted.name;
+    if (resumeSelected.phone && resumeExtracted.phone) updates.phone = resumeExtracted.phone;
+    if (resumeSelected.education && resumeExtracted.education?.length) updates.education = resumeExtracted.education.join('\\n');
+    if (resumeSelected.experience && resumeExtracted.experience?.length) updates.experience = resumeExtracted.experience.join('\\n');
+    if (resumeSelected.skills && resumeExtracted.skills?.length) updates.skills = resumeExtracted.skills.join(', ');
+    
     setForm(prev => ({ ...prev, ...updates }));
     setResumeExtracted(null);
     setResumeApplied(true);
@@ -167,11 +175,13 @@ export default function ProfilePage() {
   };
 
   const resumeFieldLabels = {
-    fullname: 'Full Name',
+    name: 'Full Name',
+    email: 'Email',
     phone: 'Phone',
     education: 'Education',
     experience: 'Work Experience',
-    skills: 'Skills'
+    skills: 'Skills',
+    certifications: 'Certifications'
   };
 
   const isLight = theme === 'light';
@@ -526,8 +536,10 @@ export default function ProfilePage() {
                 />
                 <label className="resume-field-content" htmlFor={`resume-field-${key}`} style={{ cursor: 'pointer' }}>
                   <div className="resume-field-label">{resumeFieldLabels[key]}</div>
-                  {resumeExtracted[key] ? (
-                    <div className="resume-field-value">{resumeExtracted[key]}</div>
+                  {resumeExtracted[key] && (Array.isArray(resumeExtracted[key]) ? resumeExtracted[key].length > 0 : String(resumeExtracted[key]).trim() !== '') ? (
+                    <div className="resume-field-value">
+                      {Array.isArray(resumeExtracted[key]) ? resumeExtracted[key].join('\\n') : resumeExtracted[key]}
+                    </div>
                   ) : (
                     <div className="resume-field-empty">Not found in resume</div>
                   )}

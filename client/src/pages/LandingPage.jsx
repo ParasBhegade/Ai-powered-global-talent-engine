@@ -72,22 +72,22 @@ export default function LandingPage() {
       {/* 1. HERO SECTION */}
       <section className="landing-hero">
         <div className="landing-hero-content reveal reveal-up">
-          <h1 className="landing-hero-title">BUILD SMARTER CAREERS <br/> WITH TALENT INTELLIGENCE</h1>
+          <h1 className="landing-hero-title">BUILD SMARTER CAREERS <br /> WITH TALENT INTELLIGENCE</h1>
           <p className="landing-hero-subtitle">
-            Data-driven career pipelines, AI-powered mock interviews,<br/>
+            Data-driven career pipelines, AI-powered mock interviews,<br />
             and real-time proficiency tracking — all in one platform.
           </p>
 
           <div className="landing-cta-card-wrapper">
-             <div className="landing-cta-glow"></div>
-             <div className="landing-cta-card">
-               <h2>Mock interviews. Track skills. Get ready.</h2>
-               <p>AI-driven interviews and simple progress tracking for real-world readiness.</p>
-               <div className="landing-cta-actions">
-                 <Link to="/interview-select" className="btn-cta-landing-dark">Start An AI Interview</Link>
-                 <Link to="/career-paths" className="btn-cta-landing-white">Explore Career Paths</Link>
-               </div>
-             </div>
+            <div className="landing-cta-glow"></div>
+            <div className="landing-cta-card">
+              <h2>Mock interviews. Track skills. Get ready.</h2>
+              <p>AI-driven interviews and simple progress tracking for real-world readiness.</p>
+              <div className="landing-cta-actions">
+                <Link to="/interview-select" className="btn-cta-landing-dark">Start An AI Interview</Link>
+                <Link to="/career-paths" className="btn-cta-landing-white">Explore Career Paths</Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -96,11 +96,11 @@ export default function LandingPage() {
       <section className="landing-highlights">
         <div className="landing-highlights-container reveal reveal-up">
           <h2 className="landing-highlights-title">KEY HIGHLIGHTS</h2>
-          
+
           <div className="landing-highlights-grid">
             <div className="landing-highlight-card reveal reveal-up" style={{ '--delay': '0ms' }}>
               <h3>Live AI Interviews</h3>
-              <p>Real-time camera + speech mock<br/>interviews with AI scoring.</p>
+              <p>Real-time camera + speech mock<br />interviews with AI scoring.</p>
             </div>
             <div className="landing-highlight-card reveal reveal-up" style={{ '--delay': '80ms' }}>
               <h3>Skill Mapping</h3>
@@ -112,7 +112,7 @@ export default function LandingPage() {
             </div>
             <div className="landing-highlight-card reveal reveal-up" style={{ '--delay': '240ms' }}>
               <h3>Resume Insights</h3>
-              <p>AI-powered feedback to improve<br/>your resume.</p>
+              <p>AI-powered feedback to improve<br />your resume.</p>
             </div>
             <div className="landing-highlight-card reveal reveal-up" style={{ '--delay': '320ms' }}>
               <h3>Progress Dashboard</h3>
@@ -131,11 +131,11 @@ export default function LandingPage() {
         <div className="landing-companies-content">
           <h2 className="landing-companies-title reveal reveal-up">COMPANIES</h2>
           <div className="landing-companies-marquee-wrapper reveal reveal-up" style={{ '--delay': '100ms' }}>
-             <div className="landing-companies-marquee">
-                {companies.concat(companies).map((company, i) => (
-                   <div key={i} className="landing-company-pill">{company}</div>
-                ))}
-             </div>
+            <div className="landing-companies-marquee">
+              {companies.concat(companies).map((company, i) => (
+                <div key={i} className="landing-company-pill">{company}</div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -144,7 +144,7 @@ export default function LandingPage() {
       <section className="landing-faq">
         <div className="landing-faq-content">
           <h2 className="landing-faq-title reveal reveal-up">FAQS</h2>
-          
+
           <div className="landing-faq-list">
             <div className="landing-faq-item reveal reveal-up" style={{ '--delay': '0ms' }}>
               <strong>1. Is this platform enough for placement prep?</strong>
@@ -166,7 +166,7 @@ export default function LandingPage() {
       <footer className="landing-footer reveal reveal-up">
         © 2026 Talent Intelligence System — Engineered for technical excellence.
       </footer>
-      
+
       <AIAssistant />
     </div>
   );

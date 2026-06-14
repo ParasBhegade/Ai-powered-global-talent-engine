@@ -316,12 +316,12 @@ h6,
 }
 
 .glass-card:hover {
-  box-shadow: 0 0 0 1px rgba(163,166,255,0.12), 0 8px 32px rgba(163,166,255,0.1);
+  box-shadow: 0 0 0 1px rgba(163, 166, 255, 0.12), 0 8px 32px rgba(163, 166, 255, 0.1);
   transform: translateY(-1px);
 }
 
 [data-theme="light"] .glass-card:hover {
-  box-shadow: 0 0 0 1px rgba(70,72,212,0.1), 0 8px 24px rgba(70,72,212,0.08);
+  box-shadow: 0 0 0 1px rgba(70, 72, 212, 0.1), 0 8px 24px rgba(70, 72, 212, 0.08);
   transform: translateY(-1px);
 }
 
@@ -643,12 +643,12 @@ h6,
 .path-card:hover {
   background: var(--surface-container-high);
   transform: translateY(-4px);
-  box-shadow: 0 0 0 1px rgba(163,166,255,0.15), 0 16px 40px rgba(163,166,255,0.1);
+  box-shadow: 0 0 0 1px rgba(163, 166, 255, 0.15), 0 16px 40px rgba(163, 166, 255, 0.1);
 }
 
 [data-theme="light"] .feature-card:hover,
 [data-theme="light"] .path-card:hover {
-  box-shadow: 0 0 0 1px rgba(70,72,212,0.12), 0 16px 40px rgba(70,72,212,0.08);
+  box-shadow: 0 0 0 1px rgba(70, 72, 212, 0.12), 0 16px 40px rgba(70, 72, 212, 0.08);
 }
 
 .path-card h3 {
@@ -1362,6 +1362,7 @@ h6,
     opacity: 0;
     transform: translateY(32px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1669,8 +1670,7 @@ h6,
     linear-gradient(to bottom,
       rgba(7, 11, 19, 0.72) 0%,
       rgba(7, 11, 19, 0.55) 50%,
-      rgba(7, 11, 19, 0.88) 100%
-    ),
+      rgba(7, 11, 19, 0.88) 100%),
     url('/src/assets/bg.png');
   background-size: cover;
   background-position: center;
@@ -1894,8 +1894,13 @@ h6,
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-50% - 10px)); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(-50% - 10px));
+  }
 }
 
 .landing-company-pill {
@@ -2214,8 +2219,7 @@ h6,
     linear-gradient(to bottom,
       rgba(248, 250, 252, 0.80) 0%,
       rgba(248, 250, 252, 0.65) 50%,
-      rgba(248, 250, 252, 0.90) 100%
-    ),
+      rgba(248, 250, 252, 0.90) 100%),
     url('/src/assets/bg.png');
   background-size: cover;
   background-position: center;
@@ -2278,8 +2282,9 @@ h6,
   inset: -1px;
   border-radius: 15px;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(163,166,255,0.3), rgba(78,222,162,0.3));
+  background: linear-gradient(135deg, rgba(163, 166, 255, 0.3), rgba(78, 222, 162, 0.3));
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
@@ -2344,12 +2349,12 @@ h6,
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  background: rgba(163,166,255,0.12);
+  background: rgba(163, 166, 255, 0.12);
   color: #a3a6ff;
 }
 
 [data-theme="light"] .resume-upload-badge {
-  background: rgba(70,72,212,0.08);
+  background: rgba(70, 72, 212, 0.08);
   color: #4648D4;
 }
 
@@ -2374,7 +2379,9 @@ h6,
 }
 
 @keyframes resumeSpin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .resume-analyzing-text {
@@ -2385,8 +2392,15 @@ h6,
 }
 
 @keyframes resumePulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* Preview Modal Overlay */
@@ -2405,8 +2419,13 @@ h6,
 }
 
 @keyframes resumeFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* Preview Modal Card */
@@ -2429,8 +2448,15 @@ h6,
 }
 
 @keyframes resumeSlideUp {
-  from { opacity: 0; transform: translateY(24px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .resume-preview-header {
@@ -2580,7 +2606,7 @@ h6,
   gap: 8px;
   padding: 10px 16px;
   border-radius: 10px;
-  background: rgba(78,222,162,0.1);
+  background: rgba(78, 222, 162, 0.1);
   color: #4edea2;
   font-size: 13px;
   font-weight: 700;
@@ -2589,7 +2615,7 @@ h6,
 }
 
 [data-theme="light"] .resume-success-flash {
-  background: rgba(0,108,73,0.08);
+  background: rgba(0, 108, 73, 0.08);
   color: #006C49;
 }
 
