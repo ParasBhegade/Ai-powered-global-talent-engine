@@ -61,7 +61,88 @@ Return STRICT JSON like:
   }
 });
 
-// POST /api/ai/recommendations — generate AI recommendations
+const CareerPath = require('../models/CareerPath');
+const User = require('../models/User');
+const { embedText, cosineSimilarity } = require('../utils/embeddings');
+
+// GET /api/ai/recommendations/matches — Vector-based career matching
+router.get('/recommendations/matches', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    let userVector = user.skillsEmbedding;
+
+    // Generate embedding on the fly if missing
+    if (!userVector || userVector.length === 0) {
+      const profileText = `Skills: ${user.skills || ''}. Experience: ${user.experience || ''}. Education: ${user.education || ''}.`;
+      userVector = await embedText(profileText);
+      user.skillsEmbedding = userVector;
+      await user.save();
+    }
+
+    if (!userVector || userVector.length === 0) {
+      return res.status(400).json({ error: 'Not enough profile data to generate recommendations.' });
+    }
+
+    const paths = await CareerPath.find({});
+    if (!paths.length) {
+      return res.status(404).json({ error: 'No career paths available.' });
+    }
+
+    // Rank paths by cosine similarity
+    const matches = paths.map(path => {
+      const score = path.requirementsEmbedding && path.requirementsEmbedding.length > 0 
+        ? cosineSimilarity(userVector, path.requirementsEmbedding) 
+        : 0;
+      return { path, score };
+    }).sort((a, b) => b.score - a.score);
+
+    const topMatches = matches.slice(0, 3);
+
+    // Provide Groq with the top matches for explanation
+    const prompt = `
+You are an expert AI Career Coach. 
+A candidate has the following profile:
+Name: ${user.fullname || user.name}
+Skills: ${user.skills || 'None explicitly listed'}
+Experience: ${user.experience || 'None explicitly listed'}
+Education: ${user.education || 'None explicitly listed'}
+
+We have mathematically matched them to the following 3 career paths based on semantic similarity:
+1. ${topMatches[0]?.path.name} (Match Score: ${(topMatches[0]?.score * 100).toFixed(1)}%)
+2. ${topMatches[1]?.path.name} (Match Score: ${(topMatches[1]?.score * 100).toFixed(1)}%)
+3. ${topMatches[2]?.path.name} (Match Score: ${(topMatches[2]?.score * 100).toFixed(1)}%)
+
+Write a concise, encouraging 2-paragraph explanation of WHY these careers are the best mathematical and semantic fit for their specific skills and experience. Do NOT output JSON, just output the plain text explanation.
+`;
+
+    let explanation = "Based on your profile, these are your top matching careers.";
+    try {
+      const content = await callGroq([
+        { role: 'system', content: 'You are an encouraging AI career coach providing insight into career matches.' },
+        { role: 'user', content: prompt }
+      ], { temperature: 0.7, maxTokens: 400 });
+      if (content) explanation = content;
+    } catch (apiError) {
+      console.warn('Groq API Error in matches explanation:', apiError.message);
+    }
+
+    res.json({
+      matches: topMatches.map(m => ({
+        _id: m.path._id,
+        name: m.path.name,
+        description: m.path.description,
+        score: m.score
+      })),
+      explanation
+    });
+
+  } catch (err) {
+    console.error('Error generating matches:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/ai/recommendations — generate AI recommendations (Gap Analysis)
 router.post('/recommendations', auth, async (req, res) => {
   try {
     const { careerName, score, total, skillList } = req.body;

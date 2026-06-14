@@ -167,15 +167,24 @@ async function seed() {
   };
 
   let skillCount = 0;
+  const { embedText } = require('./utils/embeddings');
+
   for (const cp of createdPaths) {
     const pathSkills = skillsData[cp.name];
     if (pathSkills) {
       const docs = pathSkills.map(s => ({ ...s, careerPath: cp._id }));
       await Skill.insertMany(docs);
       skillCount += docs.length;
+
+      // Concatenate path info and skill names to build a comprehensive embedding text
+      const skillNames = pathSkills.map(s => s.skillName).join(', ');
+      const textToEmbed = `Career: ${cp.name}. Description: ${cp.description}. Required Skills: ${skillNames}.`;
+      console.log(`Generating embedding for ${cp.name}...`);
+      cp.requirementsEmbedding = await embedText(textToEmbed);
+      await cp.save();
     }
   }
-  console.log(`✅ ${skillCount} skills created`);
+  console.log(`✅ ${skillCount} skills created and CareerPath embeddings generated`);
 
   // ========== Aptitude Questions (sample — 5 per path for first 3 paths) ==========
   const sampleQuestions = {

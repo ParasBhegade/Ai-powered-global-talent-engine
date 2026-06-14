@@ -30,6 +30,11 @@ router.put('/profile', auth, async (req, res) => {
     if (resumeRaw !== undefined) updates.resumeRaw = resumeRaw;
     if (resumeParsed !== undefined) updates.resumeParsed = resumeParsed;
 
+    // Compute semantic embedding of the user's skills and experience
+    const { embedText } = require('../utils/embeddings');
+    const profileText = `Skills: ${skills || ''}. Experience: ${experience || ''}. Education: ${education || ''}.`;
+    updates.skillsEmbedding = await embedText(profileText);
+
     const user = await User.findByIdAndUpdate(req.user._id, updates, { new: true }).select('-password');
     res.json({ user, message: 'Profile updated successfully' });
   } catch (err) {
