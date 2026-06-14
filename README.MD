@@ -52,7 +52,8 @@ npm run dev
 Frontend runs on `http://localhost:5173`
 
 ## Features
-- 🤖 AI Career Recommendations (Groq API)
+- 📄 AI Resume Parsing (LLM structured extraction from PDF/DOCX/TXT)
+- 🤖 Vector-Based AI Career Recommendations (Cosine Similarity + Groq explanations)
 - 🎯 Live AI Interviews (camera + speech recognition)
 - 📊 Aptitude Tests with Chart.js visualizations
 - 👤 Profile management with photo upload

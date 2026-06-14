@@ -15,7 +15,8 @@ const userSchema = new mongoose.Schema({
   profilePhoto: { type: String, default: '' },
   profileCompleted: { type: Boolean, default: false },
   resumeRaw: { type: String, default: '' },
-  resumeParsed: { type: mongoose.Schema.Types.Mixed, default: null }
+  resumeParsed: { type: mongoose.Schema.Types.Mixed, default: null },
+  skillsEmbedding: { type: [Number], default: [] }
 }, { timestamps: true });
 
 userSchema.pre('save', async function() {
